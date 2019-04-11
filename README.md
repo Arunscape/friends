@@ -6,10 +6,10 @@
 - [Golang](https://golang.org/)
 
 ### Frontend:
-## Mobile:
+#### Mobile:
 - [Flutter](https://flutter.dev/)
 
-## Web:
+#### Web:
 - [Flutter/Hummingbird](https://medium.com/flutter-io/hummingbird-building-flutter-for-the-web-e687c2a023a8)
 
 ## Roadmap:
