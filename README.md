@@ -1,8 +1,5 @@
 # friends
 
-## Kanban board:
-https://github.com/users/Arunscape/projects/3
-
 ## Tech stack:
 
 ### Backend:
