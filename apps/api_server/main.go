@@ -3,15 +3,16 @@ package main
 import (
 	"github.com/arunscape/friends/apps/api_server/database"
 	"github.com/arunscape/friends/apps/api_server/server"
+	"github.com/arunscape/friends/apps/api_server/logger"
 
-	"fmt"
 	"os"
+  "strconv"
 )
 
 func main() {
 	val := os.Getenv("DID_I_SET_THE_ENVIROMENT_VARIABLES")
 	if val != "YES I DID" {
-		fmt.Println("Enviroment variables not found")
+		logger.Error("Enviroment variables not found")
 		return
 	}
 
@@ -22,7 +23,13 @@ func main() {
 		db.ResetTheWholeDatabase()
 	}
 
-	fmt.Println("### Starting Server ###")
 	server.MakeRoutes(db)
-	server.RunServer(8049)
+
+  port := 8049
+  port_env, _ := strconv.Atoi(os.Getenv("PORT"))
+  if port_env != 0 {
+    port = port_env
+  }
+	logger.Info("Starting Server (PORT "+ strconv.Itoa(port) +")")
+	server.RunServer(port)
 }

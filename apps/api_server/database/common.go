@@ -1,7 +1,8 @@
 package database
 
 import (
-	"fmt"
+	"github.com/arunscape/friends/apps/api_server/logger"
+
 	"os/exec"
 )
 
@@ -9,7 +10,7 @@ type AccessObject interface {
 	Open()
 	Close()
 	ResetTheWholeDatabase()
-	GetUserByAuthId(string) User
+	GetUserByAuthId(string) (User, bool)
 	CreateNewUser(User)
 }
 
@@ -23,7 +24,7 @@ func UUID() string {
 	// Works on linux only, probably. Sorry
 	out, err := exec.Command("uuidgen").Output()
 	if err != nil {
-		fmt.Println("Failed to create uuid")
+		logger.Error("Failed to create uuid")
 	}
 	return string(out)
 }

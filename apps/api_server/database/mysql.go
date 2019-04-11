@@ -1,10 +1,11 @@
 package database
 
 import (
+	"github.com/arunscape/friends/apps/api_server/logger"
+
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 
-	"fmt"
 	"os"
 )
 
@@ -25,14 +26,14 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
     PRIMARY KEY(id)
   )`)
 	dao.CreateNewUser(User{AuthId: "49", Name: "Testy McTestface"})
-	fmt.Println("Database reset and ready to go")
+	logger.Info("Database reset and ready to go")
 }
 
 func (dao *MySQLAccessObject) Open() {
 	dataString := os.Getenv("DB_USER") + ":" + os.Getenv("DB_PASSWD") + "@tcp(" + os.Getenv("DB_LOC") + ")/" + os.Getenv("DB_NAME")
 	db, err := sql.Open("mysql", dataString)
 	if err != nil {
-		fmt.Println("Failed to connect to database: ", dataString)
+		logger.Error("Failed to connect to database: ", dataString)
 	}
 
 	dao.db = db
@@ -45,24 +46,25 @@ func (dao *MySQLAccessObject) CreateNewUser(user User) {
 	dao.db.Exec("INSERT INTO users(id, name, authId) VALUES(?, ?, ?)", UUID(), user.Name, user.AuthId)
 }
 
-func (dao *MySQLAccessObject) GetUserByAuthId(id string) User {
+func (dao *MySQLAccessObject) GetUserByAuthId(id string) (User, bool) {
 	var user User
+  found := false
 	rows, err := dao.db.Query("select id, name from users where authId = ?", id)
 	if err != nil {
-		fmt.Println("Failed to query database")
+		logger.Error("Failed to query database")
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err := rows.Scan(&user.Id, &user.Name)
 		if err != nil {
-			fmt.Println(err)
+      logger.Error("ERROR", err)
 		}
+    found = true
 	}
 	err = rows.Err()
 	if err != nil {
-		fmt.Println(err)
+    logger.Error("ERROR", err)
 	}
-	fmt.Println(user)
-	return user
+	return user, found
 }
