@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - run: flutter doctor
-      - run: cd mobile_frontend && flutter packages get
-      - run: cd mobile_frontend && flutter analyze
-      - run: cd mobile_frontend && flutter test
+      - run: cd apps/mobile_frontend && flutter packages get
+      - run: cd apps/mobile_frontend && flutter analyze
+      - run: cd apps/mobile_frontend && flutter test
       # - run: flutter -v build apk
