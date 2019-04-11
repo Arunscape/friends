@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    branches:
+      only:
+        - master
+        - cicd
+        - mobile_frontend
+        
+    docker:
+      - image: cirrusci/flutter
+    steps:
+      - checkout
+      - run: cd mobile_frontend
+      - run: flutter doctor
+      - run: flutter analyze
+      - run: flutter test 
+      # - run: flutter -v build apk
