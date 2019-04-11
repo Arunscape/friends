@@ -6,13 +6,12 @@ jobs:
         - master
         - cicd
         - mobile_frontend
-        
     docker:
       - image: cirrusci/flutter
     steps:
       - checkout
-      - run: cd mobile_frontend
       - run: flutter doctor
-      - run: flutter analyze
-      - run: flutter test 
+      - run: cd mobile_frontend && flutter packages get
+      - run: cd mobile_frontend && flutter analyze
+      - run: cd mobile_frontend && flutter test
       # - run: flutter -v build apk
