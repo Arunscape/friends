@@ -12,6 +12,8 @@ func MakeRoutes(db database.AccessObject) {
 
 	http.HandleFunc("/user/new", NewUserHandler(db))
 	http.HandleFunc("/user/signin", SigninHandler(db))
+
+	http.HandleFunc("/test/signin", GoogleWebSigninHandler())
 }
 
 func RunServer(port int) {

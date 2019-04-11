@@ -13,11 +13,14 @@ const INVALID_SIGNIN_TOKEN = "Invalid signin token"
 const UNKNOWN = "Something went wrong while processing request"
 const INVALID_JSON_RESPONSE = "Failed to encode response as JSON"
 const INVALID_JSON_INPUT = "Failed to parse input as JSON"
+const USER_DOES_NOT_EXIST = "User does not exist"
 
 var reasonStatus = map[string]int{
-	INVALID_SIGNIN_TOKEN:  400,
+	INVALID_SIGNIN_TOKEN:  401,
 	UNKNOWN:               500,
 	INVALID_JSON_RESPONSE: 500,
+	INVALID_JSON_INPUT:    400,
+	USER_DOES_NOT_EXIST:   401,
 }
 
 func JLogicFinalize(msg string) ([]byte, int) {
@@ -55,20 +58,20 @@ func SigninLogic(d interface{}, db database.AccessObject) (interface{}, error) {
 		return "", errors.New(INVALID_SIGNIN_TOKEN)
 	}
 
-	user := db.GetUserByAuthId(gId)
+	user, found := db.GetUserByAuthId(gId)
+	if !found {
+		return "", errors.New(USER_DOES_NOT_EXIST)
+	}
 
 	val, err := MakeUserFullToken(user)
-  if !ValidateUserToken(val) {
-    return nil, nil
-  }
 	return "{\"tok\": \"" + val + "\"}", err
 }
 
 func NewUserLogic(d interface{}, db database.AccessObject) (interface{}, error) {
 	data := d.(*InputSignup)
-  if data == nil {
-    return nil, nil
-  }
+	if data == nil {
+		return nil, nil
+	}
 	return database.User{Name: "Jacob Reckhard"}, nil
 }
 
