@@ -7,14 +7,17 @@ import (
 
 	"fmt"
 	"os"
+	"time"
 )
 
 var USER_SECRET = []byte(os.Getenv("TOK_SECRET"))
 
 func MakeUserFullToken(user database.User) (string, error) {
+	exp := time.Now().Add(time.Minute * 5)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"name": user.Name,
 		"id":   user.Id,
+		"exp":  exp.Unix()*1000 + int64(exp.Nanosecond()/1000000),
 	})
 	tokenString, err := token.SignedString(USER_SECRET)
 	return tokenString, err
@@ -32,10 +35,10 @@ func ValidateUserToken(tokStr string) bool {
 	}
 	mc := token.Claims.(jwt.MapClaims)
 	exp := mc["exp"]
-	if exp == nil {
-		return false
-	}
-	return true
+  expTime := int64(exp.(float64))
+	t := time.Now()
+  curTime := t.Unix()*1000 + int64(t.Nanosecond()/1000000)
+	return expTime > curTime
 
 }
 

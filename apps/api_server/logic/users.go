@@ -5,7 +5,6 @@ import (
 
 	"encoding/json"
 	"errors"
-	"fmt"
 )
 
 type JLogic func(interface{}, database.AccessObject) (interface{}, error)
@@ -59,12 +58,17 @@ func SigninLogic(d interface{}, db database.AccessObject) (interface{}, error) {
 	user := db.GetUserByAuthId(gId)
 
 	val, err := MakeUserFullToken(user)
+  if !ValidateUserToken(val) {
+    return nil, nil
+  }
 	return "{\"tok\": \"" + val + "\"}", err
 }
 
 func NewUserLogic(d interface{}, db database.AccessObject) (interface{}, error) {
 	data := d.(*InputSignup)
-	fmt.Println(data)
+  if data == nil {
+    return nil, nil
+  }
 	return database.User{Name: "Jacob Reckhard"}, nil
 }
 

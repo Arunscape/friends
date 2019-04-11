@@ -56,13 +56,12 @@ func (dao *MySQLAccessObject) GetUserByAuthId(id string) User {
 	for rows.Next() {
 		err := rows.Scan(&user.Id, &user.Name)
 		if err != nil {
-			fmt.Println(err)
+      fmt.Println("ERROR", err)
 		}
 	}
 	err = rows.Err()
 	if err != nil {
-		fmt.Println(err)
+    fmt.Println("ERROR", err)
 	}
-	fmt.Println(user)
 	return user
 }
