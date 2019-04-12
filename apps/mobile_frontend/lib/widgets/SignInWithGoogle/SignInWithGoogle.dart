@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../AppState.dart';
+import '../../pages/HomePage.dart';
 
 class SignInWithGoogle extends StatelessWidget {
   @override
@@ -6,10 +8,12 @@ class SignInWithGoogle extends StatelessWidget {
     return new RaisedButton(
       child: Text('Login with Google'),
       onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SecondRoute()),
-        // );
+        var s = new AppState();
+        s.isLoggedin = true;
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => new HomePage()),
+        );
       },
     );
   }
