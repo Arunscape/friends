@@ -1,5 +1,10 @@
 class AppState {
-  final bool something;
+  static final AppState _singleton = new AppState._internal();
+  bool isLoggedin;
 
-  AppState({this.something});
+  factory AppState() {
+    return _singleton;
+  }
+
+  AppState._internal();
 }
