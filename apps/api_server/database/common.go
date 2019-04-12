@@ -15,9 +15,11 @@ type AccessObject interface {
 }
 
 type User struct {
-	Name   string
-	Id     string
-	AuthId string
+	Name    string
+	Email   string
+	Picture string
+	Id      string
+	AuthId  string
 }
 
 func UUID() string {
