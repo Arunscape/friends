@@ -1,0 +1,15 @@
+FROM golang:1.10.4
+WORKDIR /go/src/github.com/arunscape/friends
+RUN go get github.com/go-sql-driver/mysql
+RUN go get github.com/dgrijalva/jwt-go
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o api_server apps/api_server/main.go
+RUN ls -l
+RUN echo $PWD
+
+
+FROM alpine:latest
+WORKDIR /root/
+COPY --from=0 /go/src/github.com/arunscape/friends/api_server .
+CMD ["./api_server"]
+

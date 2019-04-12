@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  reverse-proxy:
+    image: traefik # The official Traefik docker image
+    command: --api --docker # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      - "80:80"     # The HTTP port
+      - "8080:8080" # The Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+
+  api-server:
+    image: prod_api_server
+    environment:
+      - GOOGLE_CLOUD_SECRET
+      - GOOGLE_CLOUD_ID
+      - TOK_SECRET
+      - LOG_LEVEL
+      - PORT
+      - DB_USER
+      - DB_PASSWD
+      - DB_LOC
+      - DB_NAME
+      - DID_I_SET_THE_ENVIROMENT_VARIABLES
+
+    labels:
+      - traefik.enable=true
+      - "traefik.frontend.rule=Host:friends.reckhard.ca"
