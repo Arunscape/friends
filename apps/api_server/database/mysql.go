@@ -23,9 +23,11 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
     id CHAR(37),
     authId VARCHAR(256),
     name VARCHAR(256),
+    email VARCHAR(256),
+    picture VARCHAR(512),
     PRIMARY KEY(id)
   )`)
-	dao.CreateNewUser(User{AuthId: "49", Name: "Testy McTestface"})
+  dao.CreateNewUser(User{AuthId: "49", Name: "Testy McTestface", Email: "testy@test.test", Picture: "https://i.guim.co.uk/img/media/ddda0e5745cba9e3248f0e27b3946f14c4d5bc04/108_0_7200_4320/master/7200.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=dff8678a6e1cdd5716fe6c49767bac9a"})
 	logger.Info("Database reset and ready to go")
 }
 
@@ -43,7 +45,7 @@ func (dao *MySQLAccessObject) Close() {
 	dao.db.Close()
 }
 func (dao *MySQLAccessObject) CreateNewUser(user User) {
-	dao.db.Exec("INSERT INTO users(id, name, authId) VALUES(?, ?, ?)", UUID(), user.Name, user.AuthId)
+	dao.db.Exec("INSERT INTO users(id, name, email, picture, authId) VALUES(?, ?, ?, ?, ?)", UUID(), user.Name, user.Email, user.Picture, user.AuthId)
 }
 
 func (dao *MySQLAccessObject) GetUserByAuthId(id string) (User, bool) {

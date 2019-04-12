@@ -45,7 +45,6 @@ func ValidateUserToken(tokStr string) bool {
 
 }
 
-func GetGoogleIdFromToken(gIdTok string) (string, bool) {
 	type GoogleAuth struct {
     Iss string `json:"iss"`
     Sub string `json:"sub"`
@@ -64,16 +63,28 @@ func GetGoogleIdFromToken(gIdTok string) (string, bool) {
 
     Error         string `json:"error"`
 	}
+
+func validateGoogleToken(gIdTok string) (GoogleAuth, bool) {
 	// Make http request to https://oauth2.googleapis.com/tokeninfo?id_token=XYZ123
 	resp, err := http.Get("https://oauth2.googleapis.com/tokeninfo?id_token=" + gIdTok)
 	if err != nil  && resp.StatusCode >= 200 && resp.StatusCode < 300 {
-		return "", false
+		return GoogleAuth{}, false
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
   var gAuth GoogleAuth
   json.Unmarshal(body, &gAuth)
   if gAuth.Error == "" {
-    return gAuth.Sub, true
+    return gAuth, true
   }
-  return "", false
+  return gAuth, false
+}
+
+func GetGoogleIdFromToken(gIdTok string) (string, bool) {
+  tok, isGood := validateGoogleToken(gIdTok)
+  return tok.Sub, isGood
+}
+
+func GetGoogleInfoFromToken(gIdTok string) (string, string, string, string, bool) {
+  tok, isGood := validateGoogleToken(gIdTok)
+  return tok.Sub, tok.Name, tok.Email, tok.Picture, isGood
 }
