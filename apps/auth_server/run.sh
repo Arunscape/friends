@@ -1,7 +1,8 @@
-rm -f main
+trap 'rm -f main' INT
+
 go build main.go
 
 . .secret.sh
-./main
+./main $1
 
 rm -f main

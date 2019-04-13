@@ -14,14 +14,13 @@ import (
 func MakeRoutes(db database.AccessObject) {
 	http.HandleFunc("/", NotFoundHandler())
 
-	http.HandleFunc("/user/new", NewUserHandler(db))
-	http.HandleFunc("/user/signin", SigninHandler(db))
+	http.HandleFunc("/user/signin", ValidateHandler(db))
 
 	http.HandleFunc("/test/signin", GoogleWebSigninHandler())
 }
 
 // RunServer just runs the server on a given port
-// it uses go's DefaultServeMux 
+// it uses go's DefaultServeMux
 func RunServer(port int) {
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }
