@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/arunscape/friends/apps/api_server/database"
-	"github.com/arunscape/friends/apps/api_server/logic"
-	"github.com/arunscape/friends/apps/api_server/logger"
+	"github.com/arunscape/friends/apps/auth_server/database"
+	"github.com/arunscape/friends/apps/auth_server/logic"
+	"github.com/arunscape/friends/apps/auth_server/logger"
 
   "os"
 	"io/ioutil"

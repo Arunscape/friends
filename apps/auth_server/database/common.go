@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/arunscape/friends/apps/api_server/logger"
+	"github.com/arunscape/friends/apps/auth_server/logger"
 
 	"os/exec"
   "strings"
