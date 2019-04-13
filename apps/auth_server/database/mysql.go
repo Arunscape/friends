@@ -1,7 +1,9 @@
 package database
 
 import (
-	"github.com/arunscape/friends/apps/auth_server/logger"
+	"github.com/arunscape/friends/commons/server/logger"
+	"github.com/arunscape/friends/commons/server/utils"
+  "github.com/arunscape/friends/commons/server/datatypes"
 
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
@@ -43,7 +45,7 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
     picture VARCHAR(512),
     PRIMARY KEY(id))`)
 
-	dao.CreateNewUser(User{AuthId: "49", Name: "Testy McTestface", Email: "testy@test.test", Picture: "https://i.guim.co.uk/img/media/ddda0e5745cba9e3248f0e27b3946f14c4d5bc04/108_0_7200_4320/master/7200.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=dff8678a6e1cdd5716fe6c49767bac9a"})
+	dao.CreateNewUser(datatypes.User{AuthId: "49", Name: "Testy McTestface", Email: "testy@test.test", Picture: "https://i.guim.co.uk/img/media/ddda0e5745cba9e3248f0e27b3946f14c4d5bc04/108_0_7200_4320/master/7200.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=dff8678a6e1cdd5716fe6c49767bac9a"})
 	logger.Info("Database reset and ready to go")
 }
 
@@ -60,15 +62,15 @@ func (dao *MySQLAccessObject) Open() {
 func (dao *MySQLAccessObject) Close() {
 	dao.db.Close()
 }
-func (dao *MySQLAccessObject) CreateNewUser(user User) {
+func (dao *MySQLAccessObject) CreateNewUser(user datatypes.User) {
 	_, isUser := dao.GetUserByAuthId(user.AuthId)
 	if !isUser {
-		dao.db.Exec("INSERT INTO users(id, name, email, picture, authId) VALUES(?, ?, ?, ?, ?)", UUID(), user.Name, user.Email, user.Picture, user.AuthId)
+		dao.db.Exec("INSERT INTO users(id, name, email, picture, authId) VALUES(?, ?, ?, ?, ?)", utils.UUID(), user.Name, user.Email, user.Picture, user.AuthId)
 	}
 }
 
-func (dao *MySQLAccessObject) GetUserByAuthId(id string) (User, bool) {
-	var user User
+func (dao *MySQLAccessObject) GetUserByAuthId(id string) (datatypes.User, bool) {
+	var user datatypes.User
 	found := true
 	err := dao.db.QueryRow("select id, name, email, picture, authId from users where authId = ?", id).Scan(&user.Id, &user.Name, &user.Email, &user.Picture, &user.AuthId)
 	if err != nil {
@@ -80,13 +82,13 @@ func (dao *MySQLAccessObject) GetUserByAuthId(id string) (User, bool) {
 	return user, found
 }
 
-func (dao *MySQLAccessObject) CreateNewGroup(g Group, u User) {
-	gid := UUID()
+func (dao *MySQLAccessObject) CreateNewGroup(g datatypes.Group, u datatypes.User) {
+	gid := utils.UUID()
 	dao.db.Exec("INSERT INTO groups(id, name) VALUES(?, ?)", gid, g.Name)
 	dao.db.Exec("INSERT INTO users_groups(uid, gid) VALUES(?, ?)", u.Id, gid)
 }
 
-func (dao *MySQLAccessObject) GetUsersByGroup(g Group) []User {
+func (dao *MySQLAccessObject) GetUsersByGroup(g datatypes.Group) []datatypes.User {
 	rows, err := dao.db.Query(`
       SELECT u.id, u.name, u.email, u.picture, u.authId FROM groups g
       JOIN users_groups ug ON g.id = ug.gid
@@ -94,11 +96,11 @@ func (dao *MySQLAccessObject) GetUsersByGroup(g Group) []User {
       WHERE g.id = ?`, g.Id)
 	if err != nil {
 		logger.Error("Failed to query database GetUsersByGroup: ", err)
-		return make([]User, 0)
+		return make([]datatypes.User, 0)
 	}
-	users := make([]User, 0)
+	users := make([]datatypes.User, 0)
 	for rows.Next() {
-		var u User
+		var u datatypes.User
 		err = rows.Scan(&u.Id, &u.Name, &u.Email, &u.Picture, &u.AuthId)
 		if err == nil {
 			users = append(users, u)
@@ -108,7 +110,7 @@ func (dao *MySQLAccessObject) GetUsersByGroup(g Group) []User {
 	return users
 }
 
-func (dao *MySQLAccessObject) getGroupsByUser(u *User) {
+func (dao *MySQLAccessObject) getGroupsByUser(u *datatypes.User) {
 	rows, err := dao.db.Query(`
       SELECT g.id, g.name FROM groups g
       JOIN users_groups ug ON g.id = ug.gid
@@ -118,9 +120,9 @@ func (dao *MySQLAccessObject) getGroupsByUser(u *User) {
 		logger.Error("Failed to query database getGroupsByUser:", err)
 		return
 	}
-	groups := make([]Group, 0)
+	groups := make([]datatypes.Group, 0)
 	for rows.Next() {
-		var g Group
+		var g datatypes.Group
 		err = rows.Scan(&g.Id, &g.Name)
 		if err == nil {
 			groups = append(groups, g)
@@ -129,7 +131,7 @@ func (dao *MySQLAccessObject) getGroupsByUser(u *User) {
 	u.Groups = groups
 }
 
-func (dao *MySQLAccessObject) getPermissionsByUser(u *User) {
+func (dao *MySQLAccessObject) getPermissionsByUser(u *datatypes.User) {
 	rows, err := dao.db.Query(`
       SELECT name FROM permissions
       WHERE uid = ?`, u.Id)

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/arunscape/friends/apps/auth_server/database"
-	"github.com/arunscape/friends/apps/auth_server/server"
+	"github.com/arunscape/friends/apps/msg_server/database"
+	"github.com/arunscape/friends/apps/msg_server/server"
 	"github.com/arunscape/friends/commons/server/logger"
 
 	"os"

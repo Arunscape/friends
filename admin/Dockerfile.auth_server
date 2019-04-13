@@ -1,7 +1,10 @@
 FROM golang:1.10.4
 WORKDIR /go/src/github.com/arunscape/friends
+
 RUN go get github.com/go-sql-driver/mysql
 RUN go get github.com/dgrijalva/jwt-go
+RUN go get github.com/google/uuid
+
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o auth_server apps/auth_server/main.go
 

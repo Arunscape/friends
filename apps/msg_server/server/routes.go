@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/arunscape/friends/commons/server/web_server"
-	"github.com/arunscape/friends/apps/auth_server/database"
+	"github.com/arunscape/friends/apps/msg_server/database"
 
 	"net/http"
 	"strconv"
@@ -15,9 +15,8 @@ import (
 func MakeRoutes(db database.AccessObject) {
 	http.HandleFunc("/", web_server.NotFoundHandler())
 
-	http.HandleFunc("/user/signin", ValidateHandler(db))
-
-	http.HandleFunc("/test/signin", GoogleWebSigninHandler())
+	http.HandleFunc("/msg/new", SendMsgHandler(db))
+	http.HandleFunc("/msg/query", GetMsgHandler(db))
 }
 
 // RunServer just runs the server on a given port
