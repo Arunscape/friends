@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/arunscape/friends/commons/server/web_server"
 	"github.com/arunscape/friends/apps/msg_server/database"
 
 	"net/http"
@@ -12,10 +13,10 @@ import (
 // purpose to avoid cluttering it up. That way people will be able to find
 // things. The routes are added to DefaultServeMux
 func MakeRoutes(db database.AccessObject) {
-	http.HandleFunc("/", NotFoundHandler())
+	http.HandleFunc("/", web_server.NotFoundHandler())
 
-	http.HandleFunc("/msg/new", SendMsgHandler())
-	http.HandleFunc("/msg/query", GetMsgHandler())
+	http.HandleFunc("/msg/new", SendMsgHandler(db))
+	http.HandleFunc("/msg/query", GetMsgHandler(db))
 }
 
 // RunServer just runs the server on a given port
