@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/arunscape/friends/apps/logger"
+	"github.com/arunscape/friends/commons/server/logger"
 	"github.com/arunscape/friends/apps/msg_server/database"
 	"github.com/arunscape/friends/apps/msg_server/logic"
 

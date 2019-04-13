@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/arunscape/friends/apps/logger"
+	"github.com/arunscape/friends/commons/server/logger"
 
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"

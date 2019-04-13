@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/arunscape/friends/apps/msg_server/database"
 	"github.com/arunscape/friends/apps/msg_server/server"
-	"github.com/arunscape/friends/apps/logger"
+	"github.com/arunscape/friends/commons/server/logger"
 
 	"os"
 	"strconv"
