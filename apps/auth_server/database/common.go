@@ -31,7 +31,8 @@ type User struct {
 	Picture string
 	Id      string
 	AuthId  string
-	Groups  []Group // not stored in DB
+	Groups  []Group
+    Permissions []string
 }
 
 // UUID should really be made more general, but this was so easy

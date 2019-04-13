@@ -19,6 +19,9 @@ func NewMySQL() *MySQLAccessObject {
 
 func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
 	dao.db.Exec("DROP TABLE IF EXISTS users")
+	dao.db.Exec("DROP TABLE IF EXISTS permissions")
+	dao.db.Exec("DROP TABLE IF EXISTS groups")
+	dao.db.Exec("DROP TABLE IF EXISTS users_groups")
 	dao.db.Exec(`CREATE TABLE groups(
     id CHAR(37),
     name VARCHAR(256),
@@ -27,6 +30,10 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
 	dao.db.Exec(`CREATE TABLE users_groups(
     uid CHAR(37),
     gid CHAR(37))`)
+
+	dao.db.Exec(`CREATE TABLE permissions(
+    uid CHAR(37),
+    name VARCHAR(127))`)
 
 	dao.db.Exec(`CREATE TABLE users(
     id CHAR(37),
@@ -69,6 +76,7 @@ func (dao *MySQLAccessObject) GetUserByAuthId(id string) (User, bool) {
 		found = false
 	}
 	dao.getGroupsByUser(&user)
+    dao.getPermissionsByUser(&user)
 	return user, found
 }
 
@@ -119,4 +127,23 @@ func (dao *MySQLAccessObject) getGroupsByUser(u *User) {
 		}
 	}
 	u.Groups = groups
+}
+
+func (dao *MySQLAccessObject) getPermissionsByUser(u *User) {
+	rows, err := dao.db.Query(`
+      SELECT name FROM permissions
+      WHERE uid = ?`, u.Id)
+	if err != nil {
+		logger.Error("Failed to query database getPermissionsByUser:", err)
+		return
+	}
+	permissions := make([]string, 0)
+	for rows.Next() {
+		var p string
+		err = rows.Scan(&p)
+		if err == nil {
+			permissions  = append(permissions, p)
+		}
+	}
+	u.Permissions = permissions
 }

@@ -18,9 +18,13 @@ var USER_SECRET = []byte(os.Getenv("TOK_SECRET"))
 func MakeUserFullToken(user database.User) (string, error) {
 	exp := time.Now().Add(time.Minute * 5)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"name": user.Name,
-		"id":   user.Id,
-		"exp":  exp.Unix()*1000 + int64(exp.Nanosecond()/1000000),
+		"name":    user.Name,
+		"id":      user.Id,
+		"email":   user.Email,
+		"picture": user.Picture,
+		"groups":  user.Groups,
+        "permissions": user.Permissions,
+		"exp":     exp.Unix()*1000 + int64(exp.Nanosecond()/1000000),
 	})
 	tokenString, err := token.SignedString(USER_SECRET)
 	return tokenString, err

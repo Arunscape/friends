@@ -63,7 +63,6 @@ func ValidateHandler(db database.AccessObject) func(http.ResponseWriter, *http.R
 	return JLogicHandler(logic.ValidateUserLogic, &logic.InputSignin{}, db)
 }
 
-
 // GoogleWebSigninHandler creates the handler for testing the signin button
 // This is the handler bound to the route /test/signin
 func GoogleWebSigninHandler() func(http.ResponseWriter, *http.Request) {
