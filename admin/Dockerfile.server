@@ -1,16 +1,18 @@
 FROM golang:1.10.4
 WORKDIR /go/src/github.com/arunscape/friends
+ARG SERVER
+RUN echo "Building server: $SERVER"
 
 RUN go get github.com/go-sql-driver/mysql
 RUN go get github.com/dgrijalva/jwt-go
 RUN go get github.com/google/uuid
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o auth_server apps/auth_server/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o main apps/${SERVER}/main.go
 
 
 FROM alpine:latest
 WORKDIR /root/
-COPY --from=0 /go/src/github.com/arunscape/friends/auth_server .
-CMD ["./auth_server"]
+COPY --from=0 /go/src/github.com/arunscape/friends/${SERVER} .
+CMD ["./main"]
 

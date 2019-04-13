@@ -1,4 +1,5 @@
 AUTH_SERVER="auth-server"
+MSG_SERVER="msg-server"
 
 function docker-compose-restart () {
   echo "Restarting service $1"
@@ -8,15 +9,8 @@ function docker-compose-restart () {
 }
 
 function deploy () {
-  SUFFIX=""
-  if [ "dev" == "$1" ]; then
-    SUFFIX="1"
-  fi
-  if [ "spike" == "$1" ]; then
-    SUFFIX="2"
-  fi
-
-  docker-compose-restart $AUTH_SERVER$SUFFIX
+  docker-compose-restart $AUTH_SERVER-$1
+  docker-compose-restart $MSG_SERVER-$1
 }
 
 ./build.sh $1

@@ -2,6 +2,8 @@ package logic
 
 import (
 	"github.com/arunscape/friends/commons/server/web_server"
+	"github.com/arunscape/friends/commons/server/security"
+	"github.com/arunscape/friends/commons/server/datatypes"
 	"github.com/arunscape/friends/apps/msg_server/database"
 
 	"errors"
@@ -43,6 +45,6 @@ type (
 	InputSendMsg struct {
 		Tok     string
 		GroupId string
-		Msg     database.Message
+		Msg     datatypes.Message
 	}
 )

@@ -1,6 +1,7 @@
 LOC="/home/jacob/friends"
 
 AUTH_SERVER="auth_server"
+MSG_SERVER="msg_server"
 
 PROD_BRANCH="server"
 DEV_BRANCH="server"
@@ -9,7 +10,11 @@ SPIKE_BRANCH="server"
 function build_all () {
   cd $LOC
   git checkout $2
-  docker build -f $LOC/admin/Dockerfile.auth_server -t $1$AUTH_SERVER . --rm
+  docker_build $1 $AUTH_SERVER &
+  docker_build $1 $MSG_SERVER &
+}
+function docker_build() {
+  docker build --build-arg SERVER=$2 -f $LOC/admin/Dockerfile.server -t $1$2 . --rm
 }
 
 case "$1" in
@@ -29,4 +34,5 @@ case "$1" in
     ;;
 esac
 
+wait
 echo "Y" | docker system prune --remove-orphans

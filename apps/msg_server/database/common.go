@@ -2,7 +2,6 @@ package database
 
 import (
 	"github.com/arunscape/friends/commons/server/datatypes"
-	"github.com/arunscape/friends/commons/server/logger"
 )
 
 // AccessObject is the general database access object, all specifc database backends must implement this
