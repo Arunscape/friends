@@ -2,6 +2,6 @@ rm -f main
 go build main.go
 
 . .secret.sh
-./main
+./main $1
 
 rm -f main

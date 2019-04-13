@@ -14,8 +14,7 @@ import (
 func MakeRoutes(db database.AccessObject) {
 	http.HandleFunc("/", NotFoundHandler())
 
-	http.HandleFunc("/user/new", NewUserHandler(db))
-	http.HandleFunc("/user/signin", SigninHandler(db))
+	http.HandleFunc("/user/signin", ValidateHandler(db))
 
 	http.HandleFunc("/test/signin", GoogleWebSigninHandler())
 }

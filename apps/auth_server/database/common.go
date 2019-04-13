@@ -14,6 +14,14 @@ type AccessObject interface {
 	ResetTheWholeDatabase()
 	GetUserByAuthId(string) (User, bool)
 	CreateNewUser(User)
+	CreateNewGroup(Group, User)
+	GetUsersByGroup(Group) []User
+}
+
+// Group is the defintion of that data that a group should contain
+type Group struct {
+	Name string
+	Id   string
 }
 
 // User is the defintion of that data that a user should contain
@@ -23,6 +31,7 @@ type User struct {
 	Picture string
 	Id      string
 	AuthId  string
+	Groups  []Group // not stored in DB
 }
 
 // UUID should really be made more general, but this was so easy

@@ -2,9 +2,9 @@ LOC="/home/jacob/friends"
 
 AUTH_SERVER="auth_server"
 
-PROD_BRANCH="devops"
-DEV_BRANCH="devops"
-SPIKE_BRANCH="devops"
+PROD_BRANCH="server"
+DEV_BRANCH="server"
+SPIKE_BRANCH="server"
 
 function build_all () {
   cd $LOC

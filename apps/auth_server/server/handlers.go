@@ -53,25 +53,16 @@ func NotFoundHandler() func(http.ResponseWriter, *http.Request) {
 	}
 }
 
-// SigninHandler creates a handler for signing in users using the standard jLogic handler pattern
+// ValidateHandler creates a handler for signing in users using the standard jLogic handler pattern
 // This is the handler bound to route /users/signin
 // it expects the following json object in the request body
 // {
 //    "GTok": "aaa.bbb.ccc"
 // }
-func SigninHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
-	return JLogicHandler(logic.SigninLogic, &logic.InputSign{}, db)
+func ValidateHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
+	return JLogicHandler(logic.ValidateUserLogic, &logic.InputSignin{}, db)
 }
 
-// NewUserHandler creates a handler for new users using the standard jLogic handler pattern
-// This is the handler bound to route /users/new
-// it expects the following json object in the request body
-// {
-//    "GTok": "aaa.bbb.ccc"
-// }
-func NewUserHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
-	return JLogicHandler(logic.NewUserLogic, &logic.InputSign{}, db)
-}
 
 // GoogleWebSigninHandler creates the handler for testing the signin button
 // This is the handler bound to the route /test/signin
