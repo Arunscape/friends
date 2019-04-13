@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/arunscape/friends/commons/server/web_server"
 	"github.com/arunscape/friends/apps/auth_server/database"
 
 	"net/http"
@@ -12,7 +13,7 @@ import (
 // purpose to avoid cluttering it up. That way people will be able to find
 // things. The routes are added to DefaultServeMux
 func MakeRoutes(db database.AccessObject) {
-	http.HandleFunc("/", NotFoundHandler())
+	http.HandleFunc("/", web_server.NotFoundHandler())
 
 	http.HandleFunc("/user/signin", ValidateHandler(db))
 
