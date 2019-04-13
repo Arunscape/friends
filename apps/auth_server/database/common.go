@@ -4,7 +4,7 @@ import (
 	"github.com/arunscape/friends/apps/auth_server/logger"
 
 	"os/exec"
-  "strings"
+	"strings"
 )
 
 // AccessObject is the general database access object, all specifc database backends must implement this
@@ -26,7 +26,7 @@ type User struct {
 }
 
 // UUID should really be made more general, but this was so easy
-// It generates a 128bit unique identifier, stored as a string 
+// It generates a 128bit unique identifier, stored as a string
 // https://en.wikipedia.org/wiki/Universally_unique_identifier
 func UUID() string {
 	// Works on linux only, probably. Sorry

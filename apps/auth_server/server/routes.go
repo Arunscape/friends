@@ -21,7 +21,7 @@ func MakeRoutes(db database.AccessObject) {
 }
 
 // RunServer just runs the server on a given port
-// it uses go's DefaultServeMux 
+// it uses go's DefaultServeMux
 func RunServer(port int) {
 	http.ListenAndServe(":"+strconv.Itoa(port), nil)
 }

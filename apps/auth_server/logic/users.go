@@ -15,13 +15,14 @@ const INVALID_JSON_RESPONSE = "Failed to encode response as JSON"
 const INVALID_JSON_INPUT = "Failed to parse input as JSON"
 const USER_DOES_NOT_EXIST = "User does not exist"
 const USER_FAILED_TO_CREATE = "Failed to create user"
+
 var reasonStatus = map[string]int{
 	INVALID_SIGNIN_TOKEN:  401,
 	UNKNOWN:               500,
 	INVALID_JSON_RESPONSE: 500,
 	INVALID_JSON_INPUT:    400,
 	USER_DOES_NOT_EXIST:   401,
-  USER_FAILED_TO_CREATE: 500,
+	USER_FAILED_TO_CREATE: 500,
 }
 
 // JLogicFinalize matches returned error messages to the proper status codes,
@@ -82,21 +83,21 @@ func SigninLogic(d interface{}, db database.AccessObject) (interface{}, error) {
 func NewUserLogic(d interface{}, db database.AccessObject) (interface{}, error) {
 	data := d.(*InputSign)
 	gId, name, email, picture, isValid := GetGoogleInfoFromToken(data.GTok)
-  if !isValid {
+	if !isValid {
 		return nil, errors.New(USER_FAILED_TO_CREATE)
-  }
+	}
 
-  user := database.User{
-    AuthId: gId,
-    Name: name,
-    Email: email,
-    Picture: picture,
-  }
-  db.CreateNewUser(user)
+	user := database.User{
+		AuthId:  gId,
+		Name:    name,
+		Email:   email,
+		Picture: picture,
+	}
+	db.CreateNewUser(user)
 	user, found := db.GetUserByAuthId(gId)
-  if !found {
+	if !found {
 		return nil, errors.New(USER_FAILED_TO_CREATE)
-  }
+	}
 
 	val, err := MakeUserFullToken(user)
 	return "{\"tok\": \"" + val + "\"}", err
@@ -106,4 +107,3 @@ func NewUserLogic(d interface{}, db database.AccessObject) (interface{}, error) 
 type InputSign struct {
 	GTok string
 }
-

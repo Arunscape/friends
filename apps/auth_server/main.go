@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/arunscape/friends/apps/auth_server/database"
-	"github.com/arunscape/friends/apps/auth_server/server"
 	"github.com/arunscape/friends/apps/auth_server/logger"
+	"github.com/arunscape/friends/apps/auth_server/server"
 
 	"os"
-  "strconv"
+	"strconv"
 )
 
 func main() {
@@ -25,11 +25,11 @@ func main() {
 
 	server.MakeRoutes(db)
 
-  port := 8049
-  port_env, _ := strconv.Atoi(os.Getenv("PORT"))
-  if port_env != 0 {
-    port = port_env
-  }
-	logger.Info("Starting Server (PORT "+ strconv.Itoa(port) +")")
+	port := 8049
+	port_env, _ := strconv.Atoi(os.Getenv("PORT"))
+	if port_env != 0 {
+		port = port_env
+	}
+	logger.Info("Starting Server (PORT " + strconv.Itoa(port) + ")")
 	server.RunServer(port)
 }
