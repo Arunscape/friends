@@ -12,6 +12,7 @@ const INVALID_JSON_RESPONSE = "Failed to encode response as JSON"
 const INVALID_JSON_INPUT = "Failed to parse input as JSON"
 const USER_DOES_NOT_EXIST = "User does not exist"
 const USER_FAILED_TO_CREATE = "Failed to create user"
+const TOKEN_FORBIDDEN = "You are not authorized to do that"
 
 var reasonStatus = map[string]int{
 	UNKNOWN:               500,
@@ -20,6 +21,7 @@ var reasonStatus = map[string]int{
 	INVALID_JSON_INPUT:    400,
 	USER_DOES_NOT_EXIST:   401,
 	USER_FAILED_TO_CREATE: 500,
+    TOKEN_FORBIDDEN: 403,
 }
 
 // JLogicFinalize matches returned error messages to the proper status codes,
@@ -49,6 +51,10 @@ func JLogicHttpWrapper(fun JLogic, in interface{}, data []byte, db interface{}) 
 	val, err := fun(in, db)
 	if err != nil {
 		return JLogicFinalize(err.Error())
+	}
+
+	if val == nil {
+	    return nil, 204
 	}
 
 	bytes, err := json.Marshal(val)

@@ -8,7 +8,6 @@ function docker-compose-restart () {
 }
 
 function deploy () {
-  ./build.sh $1
   SUFFIX=""
   if [ "dev" == "$1" ]; then
     SUFFIX="1"
@@ -20,6 +19,7 @@ function deploy () {
   docker-compose-restart $AUTH_SERVER$SUFFIX
 }
 
+./build.sh $1
 case "$1" in
   "")
     deploy "prod"

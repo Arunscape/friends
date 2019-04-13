@@ -3,6 +3,8 @@ package logic
 import (
 	"github.com/arunscape/friends/commons/server/web_server"
 	"github.com/arunscape/friends/apps/auth_server/database"
+  "github.com/arunscape/friends/commons/server/datatypes"
+  "github.com/arunscape/friends/commons/server/security"
 
 	"errors"
 )
@@ -12,12 +14,12 @@ import (
 func ValidateUserLogic(d interface{}, db_dat interface{}) (interface{}, error) {
     db := db_dat.(database.AccessObject)
 	data := d.(*InputSignin)
-	gId, name, email, picture, isValid := GetGoogleInfoFromToken(data.GTok)
+	gId, name, email, picture, isValid := security.GetGoogleInfoFromToken(data.GTok)
 	if !isValid {
 		return nil, errors.New(web_server.USER_FAILED_TO_CREATE)
 	}
 
-	user := database.User{
+	user := datatypes.User{
 		AuthId:  gId,
 		Name:    name,
 		Email:   email,
@@ -29,7 +31,7 @@ func ValidateUserLogic(d interface{}, db_dat interface{}) (interface{}, error) {
 		return nil, errors.New(web_server.USER_FAILED_TO_CREATE)
 	}
 
-	val, err := MakeUserFullToken(user)
+	val, err := security.MakeUserFullToken(user)
 	return "{\"tok\": \"" + val + "\"}", err
 }
 

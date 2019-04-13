@@ -1,7 +1,7 @@
-package logic
+package security
 
 import (
-	"github.com/arunscape/friends/apps/auth_server/database"
+	"github.com/arunscape/friends/commons/server/datatypes"
 
 	"github.com/dgrijalva/jwt-go"
 
@@ -15,7 +15,7 @@ import (
 
 var USER_SECRET = []byte(os.Getenv("TOK_SECRET"))
 
-func MakeUserFullToken(user database.User) (string, error) {
+func MakeUserFullToken(user datatypes.User) (string, error) {
 	exp := time.Now().Add(time.Minute * 5)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"name":    user.Name,

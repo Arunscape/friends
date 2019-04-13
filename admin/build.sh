@@ -29,4 +29,4 @@ case "$1" in
     ;;
 esac
 
-echo "Y" | docker system prune
+echo "Y" | docker system prune --remove-orphans
