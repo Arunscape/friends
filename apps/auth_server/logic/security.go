@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"github.com/arunscape/friends/apps/api_server/database"
+	"github.com/arunscape/friends/apps/auth_server/database"
 
 	"github.com/dgrijalva/jwt-go"
 

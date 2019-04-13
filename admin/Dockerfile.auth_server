@@ -3,11 +3,11 @@ WORKDIR /go/src/github.com/arunscape/friends
 RUN go get github.com/go-sql-driver/mysql
 RUN go get github.com/dgrijalva/jwt-go
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o api_server apps/api_server/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o auth_server apps/auth_server/main.go
 
 
 FROM alpine:latest
 WORKDIR /root/
-COPY --from=0 /go/src/github.com/arunscape/friends/api_server .
-CMD ["./api_server"]
+COPY --from=0 /go/src/github.com/arunscape/friends/auth_server .
+CMD ["./auth_server"]
 

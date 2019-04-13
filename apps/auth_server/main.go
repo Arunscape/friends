@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/arunscape/friends/apps/api_server/database"
-	"github.com/arunscape/friends/apps/api_server/server"
-	"github.com/arunscape/friends/apps/api_server/logger"
+	"github.com/arunscape/friends/apps/auth_server/database"
+	"github.com/arunscape/friends/apps/auth_server/server"
+	"github.com/arunscape/friends/apps/auth_server/logger"
 
 	"os"
   "strconv"

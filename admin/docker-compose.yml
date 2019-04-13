@@ -3,16 +3,16 @@ version: "3"
 services:
   reverse-proxy:
     image: traefik # The official Traefik docker image
-    command: --api --docker # Enables the web UI and tells Traefik to listen to docker
+    command: --auth --docker # Enables the web UI and tells Traefik to listen to docker
     ports:
       - "80:80"     # The HTTP port
-      - "8080:8080" # The Web UI (enabled by --api)
+      - "8080:8080" # The Web UI (enabled by --auth)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
 
 #### PRODUCTION CONFIGURATIONS ####
-  api-server:
-    image: prod_api_server
+  auth-server:
+    image: prod_auth_server
     env_file: ./prod.env
     environment:
       - PORT=8049
@@ -23,8 +23,8 @@ services:
       - "traefik.port=8049"
 
 #### DEVELOPMENT CONFIGURATIONS ####
-  api-server1:
-    image: dev_api_server
+  auth-server1:
+    image: dev_auth_server
     env_file: ./dev.env
     environment:
       - PORT=8050
@@ -35,8 +35,8 @@ services:
       - "traefik.port=8050"
 
 #### SPIKE CONFIGURATIONS ####
-  api-server2:
-    image: spike_api_server
+  auth-server2:
+    image: spike_auth_server
     env_file: ./spike.env
     environment:
       - PORT=8051

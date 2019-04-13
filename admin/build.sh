@@ -1,6 +1,6 @@
 LOC="/home/jacob/friends"
 
-API_SERVER="api_server"
+AUTH_SERVER="auth_server"
 
 PROD_BRANCH="devops"
 DEV_BRANCH="devops"
@@ -9,7 +9,7 @@ SPIKE_BRANCH="devops"
 function build_all () {
   cd $LOC
   git checkout $2
-  docker build -f $LOC/admin/Dockerfile.api_server -t $1$API_SERVER . --rm
+  docker build -f $LOC/admin/Dockerfile.auth_server -t $1$AUTH_SERVER . --rm
 }
 
 case "$1" in

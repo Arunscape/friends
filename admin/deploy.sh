@@ -1,4 +1,4 @@
-API_SERVER="api-server"
+AUTH_SERVER="auth-server"
 
 function docker-compose-restart () {
   echo "Restarting service $1"
@@ -17,7 +17,7 @@ function deploy () {
     SUFFIX="2"
   fi
 
-  docker-compose-restart $API_SERVER$SUFFIX
+  docker-compose-restart $AUTH_SERVER$SUFFIX
 }
 
 case "$1" in
