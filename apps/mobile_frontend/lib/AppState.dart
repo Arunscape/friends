@@ -1,6 +1,6 @@
 class AppState {
   static final AppState _singleton = new AppState._internal();
-  bool isLoggedin;
+  bool isLoggedin = false;
 
   factory AppState() {
     return _singleton;

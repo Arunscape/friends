@@ -1,14 +1,16 @@
 // https://flutterbyexample.com/flutter-redux-setup
-import 'package:flutter/material.dart';
 // import 'package:redux/redux.dart';
 // import 'package:flutter_redux/flutter_redux.dart';
 // import 'package:redux_logging/redux_logging.dart';
 // import 'reducers/ducks.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'pages/LoginPage/LoginPage.dart';
 
-import 'AppState.dart';
-import 'pages/Login.dart';
-
-void main() => runApp(new Friends());
+Future main() async {
+  await DotEnv().load('.env');
+  runApp(new Friends());
+}
 
 class Friends extends StatelessWidget {
   // final store = new Store<AppState>(
