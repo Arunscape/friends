@@ -41,25 +41,27 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_redux:
+  flutter_dotenv:
     dependency: "direct main"
     description:
-      name: flutter_redux
+      name: flutter_dotenv
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.3"
+    version: "2.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  logging:
-    dependency: transitive
+  google_sign_in:
+    dependency: "direct main"
     description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.11.3+2"
+      path: "packages/google_sign_in"
+      ref: server-auth-code
+      resolved-ref: "82ffca664c6db9d6864e3b24649d855f9a6e049f"
+      url: "git://github.com/fbcouch/plugins.git"
+    source: git
+    version: "4.0.1+1"
   matcher:
     dependency: transitive
     description:
@@ -95,27 +97,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  redux:
-    dependency: transitive
-    description:
-      name: redux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
-  redux_logging:
-    dependency: "direct main"
-    description:
-      name: redux_logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0"
-  redux_thunk:
-    dependency: "direct main"
-    description:
-      name: redux_thunk
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -179,3 +160,4 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.1.0 <3.0.0"
+  flutter: ">=0.1.4 <2.0.0"

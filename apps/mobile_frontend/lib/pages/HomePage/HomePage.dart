@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/SignInWithGoogle/SignInWithGoogle.dart';
-
-class LoginPage extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +9,7 @@ class LoginPage extends StatelessWidget {
       //   title: Text('First Route'),
       // ),
       body: Center(
-        child: new SignInWithGoogle(),
+        child: new Text('Ayyyyyyyy'),
       ),
     );
   }
