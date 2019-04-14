@@ -6,6 +6,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'pages/LoginPage/LoginPage.dart';
+import 'pages/MessagesPage/MessagesPage.dart';
+import 'pages/HomePage/HomePage.dart';
+import 'AppState.dart';
 
 Future main() async {
   await DotEnv().load('.env');
@@ -31,9 +34,17 @@ class Friends extends StatelessWidget {
     //   ),
     // );
 
+    var s = new AppState();
     return new MaterialApp(
+      
       title: 'friends',
-      home: new LoginPage(),
+
+      initialRoute: s.isLoggedin ? '/' : '/login',
+      routes:{
+        '/': (context) => new HomePage(),
+        '/login': (context) => new LoginPage(),
+        '/messages': (context) => new MessagesPage(),
+      }
     );
   }
 }
