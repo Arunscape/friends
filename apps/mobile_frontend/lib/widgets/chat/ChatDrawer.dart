@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_frontend/widgets/chat/UserInfoWidget.dart';
 
 class ChatDrawer extends StatelessWidget {
-  void Function(String title) setTitle;
-  ChatDrawer(void Function(String title) setTitle) {
-    this.setTitle = setTitle;
-  }
+  final void Function(String title) setTitle;
+  final User usr;
+  ChatDrawer(this.setTitle, this.usr);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
-        DrawerHeader(
-          child: Text('Group Select'),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-          ),
-        ),
+        UserInfoWidget(this.usr),
         ListTile(
           title: Text('Engineering Friends!'),
           onTap: () {
