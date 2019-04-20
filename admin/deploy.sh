@@ -1,3 +1,4 @@
+#!/bin/bash
 AUTH_SERVER="auth-server"
 MSG_SERVER="msg-server"
 
@@ -13,12 +14,17 @@ function deploy () {
   docker-compose-restart $MSG_SERVER-$1
 }
 
+function full-redeploy() {
+    docker-compose down
+    racket make-docker-compose.rkt > docker-compose.yml
+    docker-compose build
+    docker-compose up -d
+}
+
 ./build.sh $1
 case "$1" in
   "")
-    deploy "prod"
-    deploy "dev"
-    deploy "spike"
+    full-redeploy
     ;;
   "prod")
     deploy "prod"

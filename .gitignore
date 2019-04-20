@@ -1,5 +1,9 @@
+# Editor files
 **/*.swp
 tags
 .idea/
 .vscode
+
+# Project files
 **/.secret.sh
+admin/docker-compose.yml
