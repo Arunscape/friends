@@ -35,3 +35,26 @@ class Friends extends StatelessWidget {
         }));
   }
 }
+
+class _ViewModel{
+  final bool authenticated;
+  final Function() onLogin;
+  final Function() onLogout;
+
+  _ViewModel({
+    this.authenticated,
+    this.onLogin,
+    this.onLogout,
+  });
+
+  factory _ViewModel.create(Store<AppState> store){
+    _onLogin() => store.dispatch(LoginAction());
+    _onLogout() => store.dispatch(LogoutAction());
+  return _ViewModel(
+    authenticated: store.state.authenticated,
+    onLogin: _onLogin,
+    onLogout: _onLogout,
+  );
+  }
+
+}

@@ -3,6 +3,7 @@ import './Actions.dart';
 
 AppState appReducer(AppState state, action){
   return new AppState(
+    authenticated: AuthenticationReducer(state.authenticated, action),
     // example: Exampleeducer(state.example, action),
   );
 }
@@ -18,3 +19,14 @@ AppState appReducer(AppState state, action){
 //   }
 //   return state;
 // }
+
+bool AuthenticationReducer(state, action){
+
+  if (action is LoginAction){
+    return true;
+  }
+
+  if(action is LogoutAction){
+    return false;
+  }
+}

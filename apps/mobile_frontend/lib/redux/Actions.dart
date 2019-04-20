@@ -3,7 +3,15 @@ import 'package:flutter/foundation.dart';
 @immutable
 class LoginAction {
 
-  bool authenticated;
+  final bool authenticated = true;
 
-  LoginAction(this.authenticated);
+  LoginAction();
+}
+
+@immutable
+class LogoutAction {
+
+  final bool authenticated = false;
+
+  LogoutAction();
 }
