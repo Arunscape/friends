@@ -6,7 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'pages/LoginPage/LoginPage.dart';
-import 'pages/MessagesPage/MessagesPage.dart';
 import 'pages/HomePage/HomePage.dart';
 import 'AppState.dart';
 
@@ -43,7 +42,6 @@ class Friends extends StatelessWidget {
       routes:{
         '/': (context) => new HomePage(),
         '/login': (context) => new LoginPage(),
-        '/messages': (context) => new MessagesPage(),
       }
     );
   }

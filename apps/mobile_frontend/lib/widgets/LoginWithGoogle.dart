@@ -13,7 +13,7 @@ class SignInWithGoogle extends StatelessWidget {
         login();
         var s = new AppState();
         if (s.isLoggedin) {
-          Navigator.pushNamed(context, '/messages');
+          Navigator.pushNamed(context, '/');
         }
       },
     );
