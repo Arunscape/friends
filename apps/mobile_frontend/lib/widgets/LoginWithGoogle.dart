@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../pages/HomePage/HomePage.dart';
 import '../actions/LoginAction.dart';
 import '../AppState.dart';
 
@@ -13,10 +12,7 @@ class SignInWithGoogle extends StatelessWidget {
         login();
         var s = new AppState();
         if (s.isLoggedin) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => new HomePage()),
-          );
+          Navigator.pushNamed(context, '/');
         }
       },
     );

@@ -19,7 +19,7 @@ class HomePageInternal extends StatefulWidget {
 }
 
 class HomeState extends State {
-  String title = 'Title';
+  String title = 'Friends';
   List<Message> msgs = [new Message("Body one", "Jacob")];
   List<Group> groups = [
     new Group("Engineering Friends", "sjfakjsdnfjksdn"),
