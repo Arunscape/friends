@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_frontend/widgets/chat/ChatDrawer.dart';
 import 'package:mobile_frontend/widgets/chat/ChatScreen.dart';
 import 'package:mobile_frontend/widgets/chat/Message.dart';
 import 'package:mobile_frontend/widgets/chat/UserInfoWidget.dart';
+
+import '../../widgets/chat/ChatDrawer.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -20,6 +21,11 @@ class HomePageInternal extends StatefulWidget {
 class HomeState extends State {
   String title = 'Title';
   List<Message> msgs = [new Message("Body one", "Jacob")];
+  List<Group> groups = [
+    new Group("Engineering Friends", "sjfakjsdnfjksdn"),
+    new Group("Programming Friends", "dsjlfakdlkfjasl"),
+    new Group("Highschool Friends", "slafjdklnvjkasd"),
+  ];
   User usr = new User("Jacob Reckhard", "jacob@reckhard.ca",
       "https://lh3.googleusercontent.com/a-/AAuE7mDJpoJdWan5dsUF0hKdoSlJoNh88Z3Nmt_DG6ju=s192");
 
@@ -51,7 +57,8 @@ class HomeState extends State {
               Center(child: new Text('Agenda tab')),
             ],
           ),
-          drawer: Drawer(child: new ChatDrawer(this.setTitle, this.usr)),
+          drawer: Drawer(
+              child: new ChatDrawer(this.setTitle, this.usr, this.groups)),
         ),
       ),
     );
