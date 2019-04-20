@@ -1,8 +1,8 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import '../AppState.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
+/*
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 GoogleSignIn _googleSignIn = GoogleSignIn(
   serverClientId: DotEnv().env['GOOGLE_SERVER_CLIENT_ID'],
   scopes: <String>[
@@ -12,6 +12,7 @@ GoogleSignIn _googleSignIn = GoogleSignIn(
     // 'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
+*/
 
 Future<void> login() async {
   // try {
@@ -27,6 +28,6 @@ Future<void> login() async {
   // }
 
   // TEMP: BYPASS LOGIN
-    var s = new AppState();
-    s.isLoggedin = true;
+  var s = new AppState();
+  s.isLoggedin = true;
 }
