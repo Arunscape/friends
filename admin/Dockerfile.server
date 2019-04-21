@@ -8,11 +8,6 @@ RUN go get github.com/dgrijalva/jwt-go
 RUN go get github.com/google/uuid
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o main apps/${SERVER}/main.go
-
-
-FROM alpine:latest
-WORKDIR /root/
-COPY --from=0 /go/src/github.com/arunscape/friends/${SERVER} .
+RUN go build -o main apps/${SERVER}/main.go
 CMD ["./main"]
 

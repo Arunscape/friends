@@ -2,7 +2,7 @@
 
 (define url "friends.reckhard.ca")
 (define envs '(("prod" 3000) ("dev" 5000) ("spike" 8000)))
-(define servers '(("auth" 0) ("msg" 1)))
+(define servers '(("auth" 0) ("msg" 1) ("email" 2)))
 
 (define docker-traefik-info
   "version: \"3\"
