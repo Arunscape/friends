@@ -1,7 +1,7 @@
 package web_server
 
 import (
-  "encoding/json"
+	"encoding/json"
 )
 
 type JLogic func(interface{}, interface{}) (interface{}, error)
@@ -21,7 +21,7 @@ var reasonStatus = map[string]int{
 	INVALID_JSON_INPUT:    400,
 	USER_DOES_NOT_EXIST:   401,
 	USER_FAILED_TO_CREATE: 500,
-    TOKEN_FORBIDDEN: 403,
+	TOKEN_FORBIDDEN:       403,
 }
 
 // JLogicFinalize matches returned error messages to the proper status codes,
@@ -54,7 +54,7 @@ func JLogicHttpWrapper(fun JLogic, in interface{}, data []byte, db interface{}) 
 	}
 
 	if val == nil {
-	    return nil, 204
+		return nil, 204
 	}
 
 	bytes, err := json.Marshal(val)

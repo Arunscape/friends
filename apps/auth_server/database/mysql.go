@@ -1,9 +1,9 @@
 package database
 
 import (
+	"github.com/arunscape/friends/commons/server/datatypes"
 	"github.com/arunscape/friends/commons/server/logger"
 	"github.com/arunscape/friends/commons/server/utils"
-  "github.com/arunscape/friends/commons/server/datatypes"
 
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
@@ -78,7 +78,7 @@ func (dao *MySQLAccessObject) GetUserByAuthId(id string) (datatypes.User, bool) 
 		found = false
 	}
 	dao.getGroupsByUser(&user)
-    dao.getPermissionsByUser(&user)
+	dao.getPermissionsByUser(&user)
 	return user, found
 }
 
@@ -144,7 +144,7 @@ func (dao *MySQLAccessObject) getPermissionsByUser(u *datatypes.User) {
 		var p string
 		err = rows.Scan(&p)
 		if err == nil {
-			permissions  = append(permissions, p)
+			permissions = append(permissions, p)
 		}
 	}
 	u.Permissions = permissions

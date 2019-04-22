@@ -1,15 +1,15 @@
 package datatypes
 
 import (
-    "time"
+	"time"
 )
 
 type Message struct {
-  Body string
-  Sender string
-  Timestamp uint64
+	Body      string
+	Sender    string
+	Timestamp uint64
 }
 
 func (m *Message) SetTimestamp() {
-  m.Timestamp = uint64(time.Now().UnixNano() / int64(time.Millisecond))
+	m.Timestamp = uint64(time.Now().UnixNano() / int64(time.Millisecond))
 }

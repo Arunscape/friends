@@ -1,7 +1,7 @@
 package database
 
 import (
-  "github.com/arunscape/friends/commons/server/datatypes"
+	"github.com/arunscape/friends/commons/server/datatypes"
 )
 
 // AccessObject is the general database access object, all specifc database backends must implement this
@@ -14,5 +14,3 @@ type AccessObject interface {
 	CreateNewGroup(datatypes.Group, datatypes.User)
 	GetUsersByGroup(datatypes.Group) []datatypes.User
 }
-
-

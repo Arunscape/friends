@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/arunscape/friends/commons/server/web_server"
 	"github.com/arunscape/friends/apps/auth_server/database"
+	"github.com/arunscape/friends/commons/server/web_server"
 
 	"net/http"
 	"strconv"
