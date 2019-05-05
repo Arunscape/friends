@@ -1,5 +1,13 @@
+# Editor files
 **/*.swp
 tags
 .idea/
 .vscode
+apps/mobile_frontend/build.gradle
+local.properties
+
+
+# Project files
 **/.secret.sh
+admin/docker-compose.yml
+

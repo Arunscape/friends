@@ -13,6 +13,7 @@ func main() {
 	val := os.Getenv("DID_I_SET_THE_ENVIROMENT_VARIABLES")
 	if val != "YES I DID" {
 		logger.Error("Enviroment variables not found")
+		logger.Error(os.Getenv("DID_I_SET_THE_ENVIROMENT_VARIABLES"))
 		return
 	}
 

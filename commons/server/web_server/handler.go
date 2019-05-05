@@ -1,10 +1,10 @@
 package web_server
 
 import (
-  "github.com/arunscape/friends/commons/server/logger"
-  "net/http"
-	"runtime/debug"
+	"github.com/arunscape/friends/commons/server/logger"
 	"io/ioutil"
+	"net/http"
+	"runtime/debug"
 )
 
 // JLogicHandler is for creating our logic handlers. It catches panics, and
@@ -29,7 +29,6 @@ func JLogicHandler(fun JLogic, dataType interface{}, db interface{}) func(w http
 			w.Write(errorResponse("Json not well formatted for this request"))
 		}
 
-		logger.Debug("Request body: ", string(body))
 		jsonOut, status := JLogicHttpWrapper(fun, dataType, body, db)
 		w.WriteHeader(status)
 		w.Write(jsonOut)
@@ -48,3 +47,5 @@ func NotFoundHandler() func(http.ResponseWriter, *http.Request) {
 		w.Write(errorResponse("Method not found"))
 	}
 }
+
+type NoData struct{}

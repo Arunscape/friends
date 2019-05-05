@@ -9,7 +9,6 @@ type AccessObject interface {
 	Open()
 	Close()
 	ResetTheWholeDatabase()
-    SendMessage(string, datatypes.Message)
-    QueryMessages(string, int, int, string) []datatypes.Message
+	SendMessage(string, datatypes.Message)
+	QueryMessages(string, int, int, string) []datatypes.Message
 }
-

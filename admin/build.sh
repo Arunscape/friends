@@ -1,7 +1,10 @@
+#!/bin/bash
+
 LOC="/home/jacob/friends"
 
 AUTH_SERVER="auth_server"
 MSG_SERVER="msg_server"
+EMAIL_SERVER="email_server"
 
 PROD_BRANCH="server"
 DEV_BRANCH="server"
@@ -12,6 +15,7 @@ function build_all () {
   git checkout $2
   docker_build $1 $AUTH_SERVER &
   docker_build $1 $MSG_SERVER &
+  docker_build $1 $EMAIL_SERVER &
 }
 function docker_build() {
   docker build --build-arg SERVER=$2 -f $LOC/admin/Dockerfile.server -t $1$2 . --rm

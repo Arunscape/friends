@@ -1,8 +1,8 @@
 package database
 
 import (
-	"github.com/arunscape/friends/commons/server/logger"
 	"github.com/arunscape/friends/commons/server/datatypes"
+	"github.com/arunscape/friends/commons/server/logger"
 
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
@@ -45,7 +45,7 @@ func (dao *MySQLAccessObject) Close() {
 }
 
 func (dao *MySQLAccessObject) SendMessage(gid string, m datatypes.Message) {
-    dao.db.Exec("INSERT INTO messages (gid, timestamp, sender, body) VALUES(?, ?, ?, ?)", gid, m.Timestamp, m.Sender, m.Body)
+	dao.db.Exec("INSERT INTO messages (gid, timestamp, sender, body) VALUES(?, ?, ?, ?)", gid, m.Timestamp, m.Sender, m.Body)
 }
 
 func (dao *MySQLAccessObject) QueryMessages(gid string, skip, amount int, text string) []datatypes.Message {
@@ -65,7 +65,5 @@ func (dao *MySQLAccessObject) QueryMessages(gid string, skip, amount int, text s
 			msgs = append(msgs, m)
 		}
 	}
-    return msgs
+	return msgs
 }
-
-
