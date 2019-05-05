@@ -3,38 +3,108 @@ package logic
 import (
 	"github.com/arunscape/friends/apps/auth_server/database"
 	"github.com/arunscape/friends/commons/server/datatypes"
+	"github.com/arunscape/friends/commons/server/logger"
 	"github.com/arunscape/friends/commons/server/security"
+	"github.com/arunscape/friends/commons/server/utils"
 	"github.com/arunscape/friends/commons/server/web_server"
 
 	"errors"
+	"os"
 )
 
-// ValidateUserLogic is the logic for doing signups
-func ValidateUserLogic(d interface{}, db_dat interface{}) (interface{}, error) {
+func UpgradeLogic(d interface{}, db_dat interface{}) (interface{}, error) {
 	db := db_dat.(database.AccessObject)
-	data := d.(*InputSignin)
-	gId, name, email, picture, isValid := security.GetGoogleInfoFromToken(data.GTok)
-	if !isValid {
-		return nil, errors.New(web_server.USER_FAILED_TO_CREATE)
-	}
+	data := d.(*Token)
+	logger.Debug(data)
 
-	user := datatypes.User{
-		AuthId:  gId,
-		Name:    name,
-		Email:   email,
-		Picture: picture,
+	usr, err := getUserFromToken(db, data.Tok)
+	if err != nil {
+		return usr, err
 	}
-	db.CreateNewUser(user)
-	user, found := db.GetUserByAuthId(gId)
-	if !found {
-		return nil, errors.New(web_server.USER_FAILED_TO_CREATE)
-	}
+	tok, err := security.CreateUserTokenLong(usr)
 
-	val, err := security.MakeUserFullToken(user)
-	return "{\"tok\": \"" + val + "\"}", err
+	return Token{tok}, err
 }
 
-// InputSign is the struct for both signin and signup
-type InputSignin struct {
-	GTok string
+// SigninLogic creates a short lived token, sends email link, then returns token, sets isValidated to false and isSignedIn to true
+func SigninLogic(d interface{}, db_dat interface{}) (interface{}, error) {
+	db := db_dat.(database.AccessObject)
+	data := d.(*Email)
+	return startSigninProcess(data.Email, db)
 }
+
+// SignupLogic adds name, email, pic, etc to DB, then acts as if signin
+func SignupLogic(d interface{}, db_dat interface{}) (interface{}, error) {
+	db := db_dat.(database.AccessObject)
+	data := d.(*Signup)
+	logger.Debug("Creating new User: ", data)
+	db.CreateNewUser(&datatypes.User{Name: data.Name, Email: data.Email, Picture: data.Pic})
+	return startSigninProcess(data.Email, db)
+}
+
+// IsUserLogic check if the user exists
+func IsUserLogic(d interface{}, db_dat interface{}) (interface{}, error) {
+	db := db_dat.(database.AccessObject)
+	data := d.(*Email)
+	_, isUser := db.GetUserByEmail(data.Email)
+	logger.Debug("Did I find User? ", isUser)
+	if !isUser {
+		return nil, errors.New(web_server.USER_NOT_FOUND)
+	}
+	return nil, nil
+}
+
+func SignoutLogic(d interface{}, db_dat interface{}) (interface{}, error) {
+	db := db_dat.(database.AccessObject)
+	data := d.(*Token)
+
+	usr, err := getUserFromToken(db, data.Tok)
+	if err != nil {
+		return usr, err
+	}
+
+	db.SignOutUser(&usr)
+	return nil, nil
+}
+
+func startSigninProcess(email string, db database.AccessObject) (interface{}, error) {
+	secret := utils.UUID()
+	usr, isUser := db.GetUserByEmail(email)
+	if !isUser {
+		return nil, errors.New(web_server.USER_DOES_NOT_EXIST)
+	}
+	db.AddUserValidation(&usr, secret)
+	link := "https://auth." + os.Getenv("DOMAIN") + "/validate/" + secret // TODO: email link
+	logger.Info("Created secure linK: ", link)
+	tok, err := security.CreateUserTokenShort(usr)
+	if err != nil {
+		return nil, errors.New(web_server.UNKNOWN)
+	}
+	return Token{Tok: tok}, nil
+}
+
+func getUserFromToken(db database.AccessObject, tokStr string) (datatypes.User, error) {
+	if !security.ValidateUserToken(tokStr) {
+		return datatypes.User{}, errors.New(web_server.TOKEN_FORBIDDEN)
+	}
+	email := security.GetUserEmailFromToken(tokStr)
+	usr, isReal := db.GetUserByEmail(email)
+	if !isReal {
+		return datatypes.User{}, errors.New(web_server.USER_NOT_FOUND)
+	}
+	return usr, nil
+}
+
+type (
+	Token struct {
+		Tok string
+	}
+	Email struct {
+		Email string
+	}
+	Signup struct {
+		Email string
+		Name  string
+		Pic   string
+	}
+)

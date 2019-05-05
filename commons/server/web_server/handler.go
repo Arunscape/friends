@@ -29,7 +29,6 @@ func JLogicHandler(fun JLogic, dataType interface{}, db interface{}) func(w http
 			w.Write(errorResponse("Json not well formatted for this request"))
 		}
 
-		logger.Debug("Request body: ", string(body))
 		jsonOut, status := JLogicHttpWrapper(fun, dataType, body, db)
 		w.WriteHeader(status)
 		w.Write(jsonOut)
@@ -48,3 +47,5 @@ func NotFoundHandler() func(http.ResponseWriter, *http.Request) {
 		w.Write(errorResponse("Method not found"))
 	}
 }
+
+type NoData struct{}

@@ -15,9 +15,12 @@ import (
 func MakeRoutes(db database.AccessObject) {
 	http.HandleFunc("/", web_server.NotFoundHandler())
 
-	http.HandleFunc("/user/signin", ValidateHandler(db))
-
-	http.HandleFunc("/test/signin", GoogleWebSigninHandler())
+	http.HandleFunc("/isuser", IsUserHandler(db))
+	http.HandleFunc("/signin", SigninHandler(db))
+	http.HandleFunc("/signup", SignupHandler(db))
+	http.HandleFunc("/signout", SignoutHandler(db))
+	http.HandleFunc("/upgrade", UpgradeHandler(db))
+	http.HandleFunc("/validate/", ValidateHandler(db))
 }
 
 // RunServer just runs the server on a given port

@@ -21,9 +21,10 @@ func NewMySQL() *MySQLAccessObject {
 
 func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
 	dao.db.Exec("DROP TABLE IF EXISTS users")
-	dao.db.Exec("DROP TABLE IF EXISTS permissions")
 	dao.db.Exec("DROP TABLE IF EXISTS groups")
+	dao.db.Exec("DROP TABLE IF EXISTS permissions")
 	dao.db.Exec("DROP TABLE IF EXISTS users_groups")
+	dao.db.Exec("DROP TABLE IF EXISTS validations")
 	dao.db.Exec(`CREATE TABLE groups(
     id CHAR(37),
     name VARCHAR(256),
@@ -39,13 +40,19 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
 
 	dao.db.Exec(`CREATE TABLE users(
     id CHAR(37),
-    authId VARCHAR(256),
     name VARCHAR(256),
     email VARCHAR(256),
     picture VARCHAR(512),
     PRIMARY KEY(id))`)
 
-	dao.CreateNewUser(datatypes.User{AuthId: "49", Name: "Testy McTestface", Email: "testy@test.test", Picture: "https://i.guim.co.uk/img/media/ddda0e5745cba9e3248f0e27b3946f14c4d5bc04/108_0_7200_4320/master/7200.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=dff8678a6e1cdd5716fe6c49767bac9a"})
+	dao.db.Exec(`CREATE TABLE validations(
+    uid CHAR(37),
+    isValidated BOOL,
+    isSignedIn BOOL,
+    secret CHAR(37),
+    PRIMARY KEY(uid))`)
+
+	dao.CreateNewUser(&datatypes.User{Name: "Testy McTestface", Email: "testy@test.test", Picture: "https://i.guim.co.uk/img/media/ddda0e5745cba9e3248f0e27b3946f14c4d5bc04/108_0_7200_4320/master/7200.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=dff8678a6e1cdd5716fe6c49767bac9a"})
 	logger.Info("Database reset and ready to go")
 }
 
@@ -55,30 +62,34 @@ func (dao *MySQLAccessObject) Open() {
 	if err != nil {
 		logger.Error("Failed to connect to database: ", dataString, err)
 	}
-
 	dao.db = db
 }
 
 func (dao *MySQLAccessObject) Close() {
 	dao.db.Close()
 }
-func (dao *MySQLAccessObject) CreateNewUser(user datatypes.User) {
-	_, isUser := dao.GetUserByAuthId(user.AuthId)
+
+func (dao *MySQLAccessObject) CreateNewUser(user *datatypes.User) {
+	_, isUser := dao.GetUserByEmail(user.Email)
 	if !isUser {
-		dao.db.Exec("INSERT INTO users(id, name, email, picture, authId) VALUES(?, ?, ?, ?, ?)", utils.UUID(), user.Name, user.Email, user.Picture, user.AuthId)
+		dao.db.Exec("INSERT INTO users(id, name, email, picture) VALUES(?, ?, ?, ?)", utils.UUID(), user.Name, user.Email, user.Picture)
+		logger.Debug("Successfully inserted new user: ", user)
+	} else {
+		logger.Debug("Failed to insert new user: ", user)
 	}
 }
 
-func (dao *MySQLAccessObject) GetUserByAuthId(id string) (datatypes.User, bool) {
+func (dao *MySQLAccessObject) GetUserByEmail(id string) (datatypes.User, bool) {
 	var user datatypes.User
 	found := true
-	err := dao.db.QueryRow("select id, name, email, picture, authId from users where authId = ?", id).Scan(&user.Id, &user.Name, &user.Email, &user.Picture, &user.AuthId)
+	err := dao.db.QueryRow("select id, name, email, picture from users where email = ?", id).Scan(&user.Id, &user.Name, &user.Email, &user.Picture)
 	if err != nil {
-		logger.Debug("Failed to query database GetUserByAuthId: ", err)
+		logger.Debug("Failed to query database GetUserByEmail with email (", id, "): ", err)
 		found = false
 	}
 	dao.getGroupsByUser(&user)
 	dao.getPermissionsByUser(&user)
+	dao.getValidationsByUser(&user)
 	return user, found
 }
 
@@ -148,4 +159,45 @@ func (dao *MySQLAccessObject) getPermissionsByUser(u *datatypes.User) {
 		}
 	}
 	u.Permissions = permissions
+}
+func (dao *MySQLAccessObject) getValidationsByUser(usr *datatypes.User) {
+	dao.db.QueryRow("select secret, isSignedIn, isValidated from validations where uid = ?", usr.Id).Scan(
+		&usr.Secret, &usr.IsSignedIn, &usr.IsValidated)
+}
+func (dao *MySQLAccessObject) setValidationsByUser(usr *datatypes.User) {
+	dao.db.Exec("REPLACE INTO validations(uid, isSignedIn, isValidated, secret) VALUES(?, ?, ?, ?)",
+		usr.Id, usr.IsSignedIn, usr.IsValidated, usr.Secret)
+}
+func (dao *MySQLAccessObject) AddUserValidation(usr *datatypes.User, secret string) {
+	usr.IsSignedIn = false
+	usr.IsValidated = false
+	usr.Secret = secret
+	dao.setValidationsByUser(usr)
+}
+func (dao *MySQLAccessObject) SignInUser(usr *datatypes.User) {
+	dao.getValidationsByUser(usr)
+	usr.IsSignedIn = true
+	usr.IsValidated = true
+	dao.setValidationsByUser(usr)
+}
+func (dao *MySQLAccessObject) SignOutUser(usr *datatypes.User) {
+	dao.getValidationsByUser(usr)
+	usr.IsSignedIn = false
+	usr.IsValidated = false
+	dao.setValidationsByUser(usr)
+}
+func (dao *MySQLAccessObject) UpgradeToken(tok string) bool {
+	var uid string
+	var email string
+	logger.Debug("Validating: tok=", tok)
+	dao.db.QueryRow("select uid from validations where secret = ?", tok).Scan(&uid)
+	logger.Debug("Validating: uid=", uid)
+	dao.db.QueryRow("select email from users where id = ?", uid).Scan(&email)
+	logger.Debug("Validating: email=", email)
+	usr, ok := dao.GetUserByEmail(email)
+	if !ok {
+		return false
+	}
+	dao.SignInUser(&usr)
+	return true
 }

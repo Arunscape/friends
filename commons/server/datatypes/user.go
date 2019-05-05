@@ -9,4 +9,7 @@ type User struct {
 	AuthId      string
 	Groups      []Group
 	Permissions []string
+	IsSignedIn  bool
+	IsValidated bool
+	Secret      string
 }
