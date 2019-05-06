@@ -1,13 +1,15 @@
-// https://flutterbyexample.com/flutter-redux-setup
-// import 'package:redux/redux.dart';
-// import 'package:flutter_redux/flutter_redux.dart';
-// import 'package:redux_logging/redux_logging.dart';
-// import 'reducers/ducks.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'pages/LoginPage/LoginPage.dart';
 import 'pages/HomePage/HomePage.dart';
-import 'AppState.dart';
+
+import 'models/AppState.dart';
+import 'redux/Actions.dart';
+import 'redux/Reducers.dart';
 
 Future main() async {
   await DotEnv().load('.env');
@@ -15,34 +17,44 @@ Future main() async {
 }
 
 class Friends extends StatelessWidget {
-  // final store = new Store<AppState>(
-  //   appReducer,
-  //   initialState: new AppState(),
-  //   middleware: [new LoggingMiddleware.printer()],
-  // );
-
   @override
   Widget build(BuildContext context) {
-    // Wrap your MaterialApp in a StoreProvider
-    // return new StoreProvider(
-    //   // new
-    //   store: store, // new
-    //   child: new MaterialApp(
-    //     title: title,
-    //     home: new LoginPage(),
-    //   ),
-    // );
-
-    var s = new AppState();
-    return new MaterialApp(
-      
-      title: 'friends',
-
-      initialRoute: s.isLoggedin ? '/' : '/login',
-      routes:{
-        '/': (context) => new HomePage(),
-        '/login': (context) => new LoginPage(),
-      }
+    final Store<AppState> store = new Store<AppState>(
+      appReducer,
+      initialState: new AppState.initialState(),
+      // middleware:
     );
+
+    // Wrap your MaterialApp in a StoreProvider
+    return new StoreProvider<AppState>(
+        store: store,
+        child:
+            new MaterialApp(title: 'friends', initialRoute: '/login', routes: {
+          '/': (context) => new HomePage(),
+          '/login': (context) => new LoginPage(),
+        }));
   }
+}
+
+class _ViewModel{
+  final bool authenticated;
+  final Function() onLogin;
+  final Function() onLogout;
+
+  _ViewModel({
+    this.authenticated,
+    this.onLogin,
+    this.onLogout,
+  });
+
+  factory _ViewModel.create(Store<AppState> store){
+    _onLogin() => store.dispatch(LoginAction());
+    _onLogout() => store.dispatch(LogoutAction());
+  return _ViewModel(
+    authenticated: store.state.authenticated,
+    onLogin: _onLogin,
+    onLogout: _onLogout,
+  );
+  }
+
 }
