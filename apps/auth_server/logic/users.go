@@ -21,6 +21,10 @@ func UpgradeLogic(d interface{}, db_dat interface{}) (interface{}, error) {
 	if err != nil {
 		return usr, err
 	}
+	if !usr.IsSignedIn {
+		return nil, errors.New(web_server.TOKEN_FORBIDDEN)
+	}
+	db.SignInUser(&usr)
 	tok, err := security.CreateUserTokenLong(usr)
 
 	return Token{tok}, err

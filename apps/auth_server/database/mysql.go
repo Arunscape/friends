@@ -170,7 +170,7 @@ func (dao *MySQLAccessObject) setValidationsByUser(usr *datatypes.User) {
 }
 func (dao *MySQLAccessObject) AddUserValidation(usr *datatypes.User, secret string) {
 	usr.IsSignedIn = false
-	usr.IsValidated = false
+	usr.IsValidated = true
 	usr.Secret = secret
 	dao.setValidationsByUser(usr)
 }
