@@ -20,6 +20,9 @@ import (
 // <p>Thanks!</p>
 func ValidateHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
 	return func(res http.ResponseWriter, req *http.Request) {
+		if web_server.Cors(res, req) {
+			return
+		}
 		logger.Info(req.Method, " ", req.URL)
 
 		secret := strings.Split(req.URL.String(), "/")[2]
