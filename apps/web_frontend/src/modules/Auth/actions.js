@@ -10,3 +10,8 @@ export async function checkUser (dispatch, Email) {
   }
   return false
 }
+
+export async function signup (dispatch, Email, Name, Pic) {
+  dispatch(signup(Email, Name, Pic))
+  return false
+}

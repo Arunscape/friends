@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import './style.css'
 
-import { checkUser } from './actions'
+import { checkUser, signup } from './actions'
 
 const STATE = {
   START: 'start',
@@ -16,7 +16,9 @@ class IndexPage extends React.Component {
     super(props)
     this.state = {
       state: STATE.START,
-      email: ''
+      email: '',
+      name: '',
+      pic: ''
     }
   }
   render () {
@@ -42,13 +44,14 @@ class IndexPage extends React.Component {
           <p>I need your email to get started</p>
         </div>
         <input
-          className={`email-input ${lookLikeEmail(this.state.email) && 'valid-email'}`}
+          className={`email-input ${lookLikeEmail(this.state.email) &&
+              'valid-email'}`}
           value={this.state.email}
           onChange={(ev) => this.setState({ email: ev.target.value })}
           type='text' placeholder='email' />
         <input
           className={`submit-email ${lookLikeEmail(this.state.email) &&
-              'show-submit-button'}`}
+            'show-submit-button'}`}
           type='button' value='Get Started'
           onClick={() => this.submitEmail()} />
       </div>
@@ -56,7 +59,24 @@ class IndexPage extends React.Component {
   }
 
   renderSignup () {
-    return <div>signup</div>
+    return (
+      <div className='welcome-screen drift ver'>
+        <div className='ver cent'>
+          <h1>Welcome, Friend!</h1>
+          <p>You seem to be missing an account, let's get you set up</p>
+        </div>
+        <input className={`name-input`} value={this.state.name}
+          onChange={(ev) => this.setState({ name: ev.target.value })}
+          type='text' placeholder='name' />
+        <input className={`name-input`} value={this.state.pic}
+          onChange={(ev) => this.setState({ pic: ev.target.value })}
+          type='text' placeholder='profile pic url' />
+        <input className={`submit-signup ${this.state.name &&
+           this.state.pic && 'show-submit-button'}`}
+          type='button' value='Get Started'
+          onClick={() => this.submitSignup()} />
+      </div>
+    )
   }
 
   renderSignin () {
@@ -75,6 +95,11 @@ class IndexPage extends React.Component {
     const res = await this.props.checkUser(this.state.email)
     this.setState({ state: res ? STATE.SIGNIN : STATE.SIGNUP })
   }
+
+  async submitSignup () {
+    await this.props.signup(this.state.email)
+    this.setState({ state: STATE.SIGNIN })
+  }
 }
 
 function lookLikeEmail (email) {
@@ -84,5 +109,6 @@ function lookLikeEmail (email) {
 export default connect((state) => ({
   user: state.user
 }), (dispatch) => ({
-  checkUser: (...data) => checkUser(dispatch, ...data)
+  checkUser: (...data) => checkUser(dispatch, ...data),
+  signup: (...data) => signup(dispatch, ...data)
 }))(IndexPage)

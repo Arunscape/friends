@@ -7,13 +7,13 @@
     border: none;
 }
 
-.welcome-screen .email-input {
+.welcome-screen input[type="text"] {
     color: var(--fg);
     text-align: center;
     border-bottom: 1px black solid;
 }
 
-.welcome-screen .email-input:focus {
+.welcome-screen input[type="text"]:focus {
     outline: none;
     border-bottom: 1px var(--hl) solid;
 }
@@ -22,16 +22,25 @@
     border-bottom: 1px var(--color-success) solid;
 }
 
-.welcome-screen .submit-email {
+.welcome-screen input[type="button"] {
     background-color: #FFFFFF33;
     border-radius: 5px;
     padding: 10px;
-    visibility: hidden;
     transition-duration: 500ms;
 }
-.welcome-screen .submit-email:hover {
+.welcome-screen input[type="button"]:hover {
     box-shadow: 2px 2px 3px black;
 }
+
+.welcome-screen .submit-email {
+    visibility: hidden;
+}
 .welcome-screen .submit-email.show-submit-button {
+    visibility: visible;
+}
+.welcome-screen .submit-signup {
+    visibility: hidden;
+}
+.welcome-screen .submit-signup.show-submit-button {
     visibility: visible;
 }
