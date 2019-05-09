@@ -3,6 +3,7 @@ html {
     --bg: #292929;
     --fg: #CCCCCC;
     --hl: #0099CC;
+    --color-success: #32CD32;
     color: var(--fg);
     background-color: var(--bg);
 }

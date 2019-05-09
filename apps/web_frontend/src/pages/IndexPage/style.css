@@ -1,0 +1,37 @@
+.welcome-screen {
+    height: 60vh;
+    padding: 20vh;
+}
+.welcome-screen input {
+    background-color: #00000000;
+    border: none;
+}
+
+.welcome-screen .email-input {
+    color: var(--fg);
+    text-align: center;
+    border-bottom: 1px black solid;
+}
+
+.welcome-screen .email-input:focus {
+    outline: none;
+    border-bottom: 1px var(--hl) solid;
+}
+
+.welcome-screen .email-input.valid-email {
+    border-bottom: 1px var(--color-success) solid;
+}
+
+.welcome-screen .submit-email {
+    background-color: #FFFFFF33;
+    border-radius: 5px;
+    padding: 10px;
+    visibility: hidden;
+    transition-duration: 500ms;
+}
+.welcome-screen .submit-email:hover {
+    box-shadow: 2px 2px 3px black;
+}
+.welcome-screen .submit-email.show-submit-button {
+    visibility: visible;
+}
