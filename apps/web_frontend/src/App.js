@@ -4,8 +4,8 @@ import { Provider } from 'react-redux'
 import store from 'store'
 import './global.css' // Global styles
 
-import ChatPage from 'pages/ChatPage'
-import IndexPage from 'pages/IndexPage'
+import ChatPage from 'modules/Chat'
+import IndexPage from 'modules/Auth'
 
 function App () {
   const Redirector = (props) => <Redirect to='/' />

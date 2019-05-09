@@ -1,6 +1,6 @@
 import { createStore, combineReducers } from 'redux'
-import user from 'reducers/user'
-import chat from 'reducers/chat'
+import user from 'modules/Auth/reducer.js'
+import chat from 'modules/Chat/reducer.js'
 
 export default createStore(combineReducers({
   chat,

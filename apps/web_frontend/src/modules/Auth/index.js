@@ -2,6 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import './style.css'
 
+import { checkUser } from './actions'
+
 const STATE = {
   START: 'start',
   SIGNUP: 'signup',
@@ -69,8 +71,9 @@ class IndexPage extends React.Component {
     return <div>error</div>
   }
 
-  submitEmail () {
-    // TODO: make http request /isuser
+  async submitEmail () {
+    const res = await this.props.checkUser(this.state.email)
+    this.setState({ state: res ? STATE.SIGNIN : STATE.SIGNUP })
   }
 }
 
@@ -80,5 +83,6 @@ function lookLikeEmail (email) {
 
 export default connect((state) => ({
   user: state.user
-}), {
-})(IndexPage)
+}), (dispatch) => ({
+  checkUser: (...data) => checkUser(dispatch, ...data)
+}))(IndexPage)

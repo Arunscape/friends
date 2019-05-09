@@ -2,5 +2,8 @@
   "extends": ["standard", "standard-jsx"],
   "rules": {
     "no-undefined": 0
+  },
+  "env": {
+      "browser": true
   }
 }
