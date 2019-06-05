@@ -11,3 +11,6 @@ local.properties
 **/.secret.sh
 admin/docker-compose.yml
 
+# generated code
+**/*.g.dart
+
