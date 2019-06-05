@@ -23,25 +23,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  flutter_dotenv:
-  flutter_redux:
-  redux_thunk:
-  
-  # TODO when this is merged:
-  # https://github.com/flutter/plugins/pull/879
-  # Then just include this package:
-  # google_sign_in:
-  # but for now:
-  google_sign_in:
-    git:
-      url: git://github.com/fbcouch/plugins.git
-      path: packages/google_sign_in
-      ref: server-auth-code
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_redux_dev_tools:
 
 
 # For information on the generic Dart part of this file, see the
@@ -61,10 +46,10 @@ flutter:
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.io/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-aware.
 
   # For details regarding adding assets from package dependencies, see
-  # https://flutter.io/assets-and-images/#from-packages
+  # https://flutter.dev/assets-and-images/#from-packages
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
@@ -84,4 +69,4 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts from package dependencies,
-  # see https://flutter.io/custom-fonts/#from-packages
+  # see https://flutter.dev/custom-fonts/#from-packages
