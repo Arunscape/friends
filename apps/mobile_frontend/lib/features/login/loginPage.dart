@@ -3,6 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:email_validator/email_validator.dart';
 
+import 'login.dart';
+import '../../state/loginState.dart';
+
 part 'loginPage.g.dart';
 
 
@@ -26,6 +29,8 @@ Widget loginForm(){
   final _formKey = GlobalKey<FormState>();
 
   final context = useContext();
+
+  final User user = getUser();
 
   return new Form(
     key: _formKey,
