@@ -13,7 +13,7 @@ SPIKE_BRANCH="server"
 
 function build_all () {
   cd $LOC
-  git checkout $2
+  # git checkout $2
   docker_build $1 $AUTH_SERVER &
   docker_build $1 $MSG_SERVER &
   docker_build $1 $EMAIL_SERVER &

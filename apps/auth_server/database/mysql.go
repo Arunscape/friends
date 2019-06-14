@@ -59,6 +59,7 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
 func (dao *MySQLAccessObject) Open() {
 	dataString := os.Getenv("DB_USER") + ":" + os.Getenv("DB_PASSWD") + "@tcp(" + os.Getenv("DB_LOC") + ")/" + os.Getenv("DB_NAME")
 	db, err := sql.Open("mysql", dataString)
+	logger.Info("Connecting to database: ", dataString)
 	if err != nil {
 		logger.Error("Failed to connect to database: ", dataString, err)
 	}
