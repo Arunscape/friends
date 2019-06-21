@@ -38,11 +38,7 @@ class IndexPage extends React.Component {
 
   renderEmailGetter () {
     return (
-      <div className='welcome-screen drift ver'>
-        <div className='ver cent'>
-          <h1>Welcome, Friend!</h1>
-          <p>I need your email to get started</p>
-        </div>
+      <WelcomeBox subHeader='I need your email to get started'>
         <input
           className={`email-input ${lookLikeEmail(this.state.email) &&
               'valid-email'}`}
@@ -54,17 +50,14 @@ class IndexPage extends React.Component {
             'show-submit-button'}`}
           type='button' value='Get Started'
           onClick={() => this.submitEmail()} />
-      </div>
+      </WelcomeBox>
     )
   }
 
   renderSignup () {
     return (
-      <div className='welcome-screen drift ver'>
-        <div className='ver cent'>
-          <h1>Welcome, Friend!</h1>
-          <p>You seem to be missing an account, let's get you set up</p>
-        </div>
+      <WelcomeBox
+        subHeader='You seem to be missing an account, let''s get you set up'>
         <input className={`name-input`} value={this.state.name}
           onChange={(ev) => this.setState({ name: ev.target.value })}
           type='text' placeholder='name' />
@@ -75,7 +68,7 @@ class IndexPage extends React.Component {
            this.state.pic && 'show-submit-button'}`}
           type='button' value='Get Started'
           onClick={() => this.submitSignup()} />
-      </div>
+      </WelcomeBox>
     )
   }
 
@@ -112,3 +105,21 @@ export default connect((state) => ({
   checkUser: (...data) => checkUser(dispatch, ...data),
   signup: (...data) => signup(dispatch, ...data)
 }))(IndexPage)
+
+
+class WelcomeBox extends React.PureComponent {
+  render () {
+    return (
+      <div className='drift container ver'>
+        <div className='welcome-screen drift ver'>
+          <div className='ver cent'>
+            <h1>Welcome, Friend!</h1>
+            <p> { this.props.subHeader } </p>
+          </div>
+          { this.props.children }
+        </div>
+        <div></div>
+      </div>
+    )
+  }
+}

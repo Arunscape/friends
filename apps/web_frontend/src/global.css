@@ -1,17 +1,25 @@
+div, html, body {
+    margin: 0;
+    padding: 0;
+}
 html {
     /* Color variables */
-    --bg: #292929;
-    --fg: #CCCCCC;
-    --hl: #0099CC;
+    --color0: #0099cc; /* Blue */
+    --color1: #98C1D9; /* Orange */
+    --color2: #353535;
+    --bg: #202020;
+    --bg2: var(--color2);
+    --fg: var(--color0);
+    --hl: var(--color1);
     --color-success: #32CD32;
     color: var(--fg);
     background-color: var(--bg);
 }
+
 .hor {
     display: flex;
     flex-direction: row;
 }
-
 .ver {
     display: flex;
     flex-direction: column;
@@ -21,14 +29,13 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
-
 .spread {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-
 .drift {
     display: flex;
     align-items: center;
@@ -38,9 +45,14 @@ html {
 .wide {
     width: 100%;
 }
-
 .tall {
     height: 100%;
+}
+.container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
 }
 
 

@@ -4,6 +4,7 @@ import (
 	"github.com/arunscape/friends/apps/auth_server/database"
 	"github.com/arunscape/friends/commons/server/datatypes"
 	"github.com/arunscape/friends/commons/server/logger"
+	"github.com/arunscape/friends/commons/server/mail"
 	"github.com/arunscape/friends/commons/server/security"
 	"github.com/arunscape/friends/commons/server/utils"
 	"github.com/arunscape/friends/commons/server/web_server"
@@ -27,6 +28,7 @@ func UpgradeLogic(d interface{}, db_dat interface{}) (interface{}, error) {
 	db.SignInUser(&usr)
 	tok, err := security.CreateUserTokenLong(usr)
 
+	logger.Info("Validating: ", usr.Email)
 	return Token{tok}, err
 }
 
@@ -78,8 +80,9 @@ func startSigninProcess(email string, db database.AccessObject) (interface{}, er
 		return nil, errors.New(web_server.USER_DOES_NOT_EXIST)
 	}
 	db.AddUserValidation(&usr, secret)
-	link := "https://auth." + os.Getenv("DOMAIN") + "/validate/" + secret // TODO: email link
-	logger.Info("Created secure linK: ", link)
+	link := "http://auth." + os.Getenv("DOMAIN") + "/validate/" + secret // TODO: email link
+	mail.SendEmail([]string{usr.Email}, "Your signup link for friends", link)
+	logger.Info("Created secure link: ", link)
 	tok, err := security.CreateUserTokenShort(usr)
 	if err != nil {
 		return nil, errors.New(web_server.UNKNOWN)

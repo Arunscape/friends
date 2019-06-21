@@ -6,8 +6,7 @@ export async function checkUser (dispatch, Email) {
   try {
     await JPost(JUrl('auth', 'isuser'), { Email })
     return true
-  } catch (err) {
-  }
+  } catch (err) { } // 404 means not a user
   return false
 }
 

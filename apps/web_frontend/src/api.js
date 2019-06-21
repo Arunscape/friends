@@ -38,6 +38,9 @@ function JHttp (url, body, method, headers) {
 }
 
 function convertToJson (response) {
+  if ([204, 205].includes(response.status)) {
+    return { status: response.status }
+  }
   return { ...response.json(), status: response.status }
 }
 function errorOnStatus (response) {
