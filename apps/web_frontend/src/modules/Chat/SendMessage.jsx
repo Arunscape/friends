@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField'
 export default class SendMessageBar extends React.Component {
   render () {
     return (
-      <div class='hor'>
+      <div className='hor'>
         <TextField />
         <IconButton>
           <Icon>send</Icon>
