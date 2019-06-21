@@ -1,3 +1,4 @@
+import { getTokenForHttp } from 'services/security/token'
 /*
  * A collection of convenince functions for doing http requests with json
  * Each expects the incomming data to be json, then returns a promise that resolves to that json
@@ -28,7 +29,8 @@ export async function JDelete (url, body, headers) {
   return JHttp(url, body, 'delete', headers || STANDARD_HEADERS)
 }
 
-async function JHttp (url, body, method, headers) {
+async function JHttp (url, body = {}, method, headers) {
+  body.Tok = getTokenForHttp()
   let data = await fetch(url, {
     method,
     headers,

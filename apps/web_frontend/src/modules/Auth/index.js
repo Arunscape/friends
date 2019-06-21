@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import './style.css'
 
 import { checkUser, signup, signin, upgrade, signout } from './actions'
+import { isTokenValid } from 'services/security/token'
 
 const STATE = {
   START: 'start',
@@ -18,18 +19,28 @@ class IndexPage extends React.Component {
       state: STATE.START,
       email: '',
       name: '',
-      pic: ''
+      pic: '',
+      dots: 0
     }
     this.poll = setInterval(() => this.pollForUpgrade(), 3000)
+    this.dotPoll = setInterval(() => this.setState({ dots: (this.state.dots + 1) % 5 }), 1000) // TODO: remove this, get a better loading sign, maybe make it a shared component
+    if (isTokenValid()) {
+      this.goToChatPage()
+    }
   }
 
   async pollForUpgrade () {
     if (this.state.state === STATE.SIGNIN) {
       if (await this.props.upgrade()) {
-        clearTimeout(this.poll)
-        this.props.history.push('/chat')
+        this.goToChatPage()
       }
     }
+  }
+
+  goToChatPage () {
+    clearTimeout(this.poll)
+    clearTimeout(this.dotPoll)
+    this.props.history.push('/chat')
   }
 
   render () {
@@ -40,8 +51,6 @@ class IndexPage extends React.Component {
         return this.renderSignup()
       case STATE.SIGNIN:
         return this.renderSignin()
-      case STATE.DONE:
-        return this.renderDone()
       default:
         return this.renderError()
     }
@@ -83,11 +92,7 @@ class IndexPage extends React.Component {
   }
 
   renderSignin () {
-    return <div>Verifying Email</div>
-  }
-
-  renderDone () {
-    return <div>error</div>
+    return <div>Verifying Email{'.'.repeat(this.state.dots)}</div>
   }
 
   renderError () {
