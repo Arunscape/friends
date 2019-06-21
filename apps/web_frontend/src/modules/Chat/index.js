@@ -1,7 +1,15 @@
 import React from 'react'
 
+import Message from './Message'
+import MessageBar from './SendMessage'
+
 export default class ChatPage extends React.Component {
   render () {
-    return <div>Chat</div>
+    return (
+      <>
+        <Message text={'Hello, World'} />
+        <MessageBar />
+      </>
+    )
   }
 }
