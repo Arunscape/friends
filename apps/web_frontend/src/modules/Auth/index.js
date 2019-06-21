@@ -57,15 +57,14 @@ class IndexPage extends React.Component {
   renderSignup () {
     return (
       <WelcomeBox
-        subHeader='You seem to be missing an account, let''s get you set up'>
+        subHeader={'You seem to be missing an account, let\'s get you set up'}>
         <input className={`name-input`} value={this.state.name}
           onChange={(ev) => this.setState({ name: ev.target.value })}
           type='text' placeholder='name' />
         <input className={`name-input`} value={this.state.pic}
           onChange={(ev) => this.setState({ pic: ev.target.value })}
           type='text' placeholder='profile pic url' />
-        <input className={`submit-signup ${this.state.name &&
-           this.state.pic && 'show-submit-button'}`}
+        <input className={`submit-signup ${this.state.name && this.state.pic && 'show-submit-button'}`}
           type='button' value='Get Started'
           onClick={() => this.submitSignup()} />
       </WelcomeBox>
