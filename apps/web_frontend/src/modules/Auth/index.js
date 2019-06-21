@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import './style.css'
 
-import { checkUser, signup } from './actions'
+import { checkUser, signup, signin, upgrade, signout } from './actions'
 
 const STATE = {
   START: 'start',
@@ -20,7 +20,18 @@ class IndexPage extends React.Component {
       name: '',
       pic: ''
     }
+    this.poll = setInterval(() => this.pollForUpgrade(), 3000)
   }
+
+  async pollForUpgrade () {
+    if (this.state.state === STATE.SIGNIN) {
+      if (await this.props.upgrade()) {
+        clearTimeout(this.poll)
+        this.props.history.push('/chat')
+      }
+    }
+  }
+
   render () {
     switch (this.state.state) {
       case STATE.START:
@@ -72,7 +83,7 @@ class IndexPage extends React.Component {
   }
 
   renderSignin () {
-    return <div>verifiy email</div>
+    return <div>Verifying Email</div>
   }
 
   renderDone () {
@@ -86,10 +97,18 @@ class IndexPage extends React.Component {
   async submitEmail () {
     const res = await this.props.checkUser(this.state.email)
     this.setState({ state: res ? STATE.SIGNIN : STATE.SIGNUP })
+    if (res) {
+      this.submitSignin()
+    }
   }
 
   async submitSignup () {
-    await this.props.signup(this.state.email)
+    await this.props.signup(this.state.email, this.state.name, this.state.pic)
+    this.setState({ state: STATE.SIGNIN })
+  }
+
+  async submitSignin () {
+    await this.props.signin(this.state.email)
     this.setState({ state: STATE.SIGNIN })
   }
 }
@@ -102,9 +121,11 @@ export default connect((state) => ({
   user: state.user
 }), (dispatch) => ({
   checkUser: (...data) => checkUser(dispatch, ...data),
-  signup: (...data) => signup(dispatch, ...data)
+  upgrade: (...data) => upgrade(dispatch, ...data),
+  signin: (...data) => signin(dispatch, ...data),
+  signup: (...data) => signup(dispatch, ...data),
+  signout: (...data) => signout(dispatch, ...data)
 }))(IndexPage)
-
 
 class WelcomeBox extends React.PureComponent {
   render () {
@@ -117,7 +138,7 @@ class WelcomeBox extends React.PureComponent {
           </div>
           { this.props.children }
         </div>
-        <div></div>
+        <div />
       </div>
     )
   }

@@ -12,38 +12,40 @@ export function JUrl (service, endpoint) {
   return `http://${service}.${server}/${endpoint}`
 }
 
-export function JGet (url, headers) {
+export async function JGet (url, headers) {
   return JHttp(url, {}, 'get', headers || STANDARD_HEADERS)
 }
 
-export function JPost (url, body, headers) {
+export async function JPost (url, body, headers) {
   return JHttp(url, body, 'post', headers || STANDARD_HEADERS)
 }
 
-export function JPut (url, body, headers) {
+export async function JPut (url, body, headers) {
   return JHttp(url, body, 'put', headers || STANDARD_HEADERS)
 }
 
-export function JDelete (url, body, headers) {
+export async function JDelete (url, body, headers) {
   return JHttp(url, body, 'delete', headers || STANDARD_HEADERS)
 }
 
-function JHttp (url, body, method, headers) {
-  return fetch(url, {
+async function JHttp (url, body, method, headers) {
+  let data = await fetch(url, {
     method,
     headers,
     body: JSON.stringify(body)
-  }
-  ).then(errorOnStatus).then(convertToJson)
+  })
+  return convertToJson(await errorOnStatus(data))
 }
 
-function convertToJson (response) {
+async function convertToJson (response) {
   if ([204, 205].includes(response.status)) {
     return { status: response.status }
   }
-  return { ...response.json(), status: response.status }
+  let data = await response.json()
+  console.log(data)
+  return { ...data, status: response.status }
 }
-function errorOnStatus (response) {
+async function errorOnStatus (response) {
   const status = response.status
   if (!(status >= 200 && status < 300)) {
     return Promise.reject(new Error(response))

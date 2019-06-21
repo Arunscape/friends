@@ -1,5 +1,6 @@
 const CHECK_EMAIL = 'CHECK_EMAIL'
 const SIGNUP = 'SIGNUP'
+const SIGNIN = 'SIGNIN'
 
 const initialState = {
   name: '',
@@ -9,24 +10,12 @@ const initialState = {
   tok: ''
 }
 
-export function signup (email, name, pic) {
-  return {
-    type: SIGNUP,
-    payload: {
-      email,
-      name,
-      pic
-    }
-  }
-}
+export const signin = (email) => action(SIGNIN, { email })
+export const signup = (email, name, pic) => action(SIGNUP, { email, name, pic })
+export const checkEmail = (email) => action(CHECK_EMAIL, { email })
 
-export function checkEmail (email) {
-  return {
-    type: CHECK_EMAIL,
-    payload: {
-      email
-    }
-  }
+function action (type, payload) {
+  return { type, payload }
 }
 
 export default function UserReducer (state = initialState, action) {
@@ -39,6 +28,7 @@ export default function UserReducer (state = initialState, action) {
         pic: action.payload.pic
       }
     case CHECK_EMAIL:
+    case SIGNIN:
       return { ...state, email: action.payload.email }
     default:
       return state
