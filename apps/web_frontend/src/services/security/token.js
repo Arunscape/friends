@@ -36,7 +36,7 @@ function parseJWT (token) {
   return JSON.parse(userDataJson)
 }
 
-function getTokenData () {
+export function getTokenData () {
   let tok = localStorage.getItem('tok')
   if (tok) {
     return parseJWT(tok)

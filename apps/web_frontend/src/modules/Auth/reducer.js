@@ -5,9 +5,7 @@ const SIGNIN = 'SIGNIN'
 const initialState = {
   name: '',
   email: '',
-  pic: '',
-  isSignedIn: false,
-  tok: ''
+  pic: ''
 }
 
 export const signin = (email) => action(SIGNIN, { email })
