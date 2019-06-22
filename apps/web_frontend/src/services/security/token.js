@@ -14,9 +14,14 @@ export function getTokenForHttp () {
   return localStorage.getItem('tok') || undefined
 }
 
-export function isTokenValid () {
+export function isTempTokenValid () {
   let data = getTokenData()
   return data.exp && data.exp > Date.now()
+}
+
+export function isTokenValid () {
+  let data = getTokenData()
+  return data.exp && data.exp > Date.now() + 1000 * 60 * 60
 }
 
 export function userHasPermission (permission) {

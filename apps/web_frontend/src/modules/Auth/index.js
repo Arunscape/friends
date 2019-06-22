@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import { checkUser, signup, signin, upgrade, signout } from './actions'
-import { isTokenValid } from 'services/security/token'
+import { isTokenValid, isTempTokenValid } from 'services/security/token'
 
 const STATE = {
   START: 'start',
@@ -26,19 +26,25 @@ class IndexPage extends React.Component {
       state: STATE.START,
       email: '',
       name: '',
-      pic: '',
-      dots: 0
-    }
-    this.poll = setInterval(() => this.pollForUpgrade(), 3000)
-    this.dotPoll = setInterval(() => this.setState({ dots: (this.state.dots + 1) % 5 }), 1000) // TODO: remove this, get a better loading sign, maybe make it a shared component
-    if (isTokenValid()) {
-      this.goToChatPage()
+      pic: ''
     }
   }
 
+  componentDidMount () {
+    this.poll = setInterval(() => this.pollForUpgrade(), 3000)
+    this.pollForUpgrade()
+  }
+
   async pollForUpgrade () {
+    if (this.state.state === STATE.START) {
+      if (isTempTokenValid()) {
+        this.setState({ state: STATE.SIGNIN })
+      }
+    }
+
     if (this.state.state === STATE.SIGNIN) {
-      if (await this.props.upgrade()) {
+      await this.props.upgrade()
+      if (isTokenValid()) {
         this.goToChatPage()
       }
     }
@@ -46,7 +52,6 @@ class IndexPage extends React.Component {
 
   goToChatPage () {
     clearTimeout(this.poll)
-    clearTimeout(this.dotPoll)
     this.props.history.push('/chat')
   }
 
