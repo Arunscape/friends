@@ -1,6 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import './style.css'
+
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+import Container from '@material-ui/core/Container'
+import Paper from '@material-ui/core/Paper'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 import { checkUser, signup, signin, upgrade, signout } from './actions'
 import { isTokenValid } from 'services/security/token'
@@ -58,41 +65,101 @@ class IndexPage extends React.Component {
 
   renderEmailGetter () {
     return (
-      <WelcomeBox subHeader='I need your email to get started'>
-        <input
-          className={`email-input ${lookLikeEmail(this.state.email) &&
-              'valid-email'}`}
-          value={this.state.email}
-          onChange={(ev) => this.setState({ email: ev.target.value })}
-          type='text' placeholder='email' />
-        <input
-          className={`submit-email ${lookLikeEmail(this.state.email) &&
-            'show-submit-button'}`}
-          type='button' value='Get Started'
-          onClick={() => this.submitEmail()} />
-      </WelcomeBox>
+      <Container component='main' maxWidth='md'>
+        <Paper style={{ padding: '10%' }}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} align='center'>
+              <Typography component='h2' variant='h3'> Welcome, Friend! </Typography>
+            </Grid>
+            <Grid item xs={12} align='center'>
+              <Typography component='h3' variant='h5'>I need your email to get started</Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                value={this.state.email}
+                onChange={(ev) => this.setState({ email: ev.target.value })}
+                fullWidth
+                type='email'
+                autoComplete='email'
+                variant='outlined'
+                label='Email' />
+            </Grid>
+            <Grid item xs={12} md={6} align='center'>
+              <Button
+                variant='contained'
+                color='primary'
+                disabled={!lookLikeEmail(this.state.email)}
+                onClick={() => this.submitEmail()} >
+                Get Started
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
     )
   }
 
   renderSignup () {
     return (
-      <WelcomeBox
-        subHeader={'You seem to be missing an account, let\'s get you set up'}>
-        <input className={`name-input`} value={this.state.name}
-          onChange={(ev) => this.setState({ name: ev.target.value })}
-          type='text' placeholder='name' />
-        <input className={`name-input`} value={this.state.pic}
-          onChange={(ev) => this.setState({ pic: ev.target.value })}
-          type='text' placeholder='profile pic url' />
-        <input className={`submit-signup ${this.state.name && this.state.pic && 'show-submit-button'}`}
-          type='button' value='Get Started'
-          onClick={() => this.submitSignup()} />
-      </WelcomeBox>
+      <Container component='main' maxWidth='md'>
+        <Paper style={{ padding: '10%' }}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} align='center'>
+              <Typography component='h2' variant='h3'> Welcome, Friend! </Typography>
+            </Grid>
+            <Grid item xs={12} align='center'>
+              <Typography component='h3' variant='h5'> You seem to be missing an account, let's get you set up </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                value={this.state.name}
+                onChange={(ev) => this.setState({ name: ev.target.value })}
+                fullWidth
+                autoComplete='name'
+                variant='outlined'
+                label='Name' />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                value={this.state.pic}
+                onChange={(ev) => this.setState({ pic: ev.target.value })}
+                fullWidth
+                variant='outlined'
+                label='Profile Picture URL' />
+            </Grid>
+            <Grid item xs={12} align='center'>
+              <Button
+                variant='contained'
+                color='primary'
+                disabled={!(this.state.name && this.state.pic)}
+                onClick={() => this.submitSignup()} >
+                Sign up
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
     )
   }
 
   renderSignin () {
-    return <div>Verifying Email{'.'.repeat(this.state.dots)}</div>
+    return (
+      <Container component='main' maxWidth='md'>
+        <Paper style={{ padding: '10%' }}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} align='center'>
+              <Typography component='h2' variant='h3'> Waiting for email validation. </Typography>
+            </Grid>
+            <Grid item xs={12} align='center'>
+              <Typography component='h3' variant='h5'> Please check your inbox! </Typography>
+            </Grid>
+            <Grid item xs={12} align='center'>
+              <LinearProgress color='secondary' />
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
+    )
   }
 
   renderError () {
@@ -131,20 +198,3 @@ export default connect((state) => ({
   signup: (...data) => signup(dispatch, ...data),
   signout: (...data) => signout(dispatch, ...data)
 }))(IndexPage)
-
-class WelcomeBox extends React.PureComponent {
-  render () {
-    return (
-      <div className='drift container ver'>
-        <div className='welcome-screen drift ver'>
-          <div className='ver cent'>
-            <h1>Welcome, Friend!</h1>
-            <p> { this.props.subHeader } </p>
-          </div>
-          { this.props.children }
-        </div>
-        <div />
-      </div>
-    )
-  }
-}
