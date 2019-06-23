@@ -1,9 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import Header from 'components/atoms/Header'
 import { saveSettings } from 'modules/Settings/actions'
 
 import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
 import Radio from '@material-ui/core/Radio'
 import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
@@ -25,34 +27,39 @@ class SettingsPage extends React.Component {
 
   render () {
     return (
-      <Container>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} align='center'>
-            <ColorPicker title='Primary Color' setColor={color => this.setState({ primary: color })} />
-          </Grid>
-          <Grid item xs={12} sm={6} align='center'>
-            <ColorPicker title='Secondary Color' setColor={color => this.setState({ secondary: color })} />
-          </Grid>
-          <Grid item xs={12} align='center'>
-            Dark:
-            <Radio
-              checked={this.state.type === 'dark'}
-              onChange={ev => this.setState({ type: ev.target.value })}
-              value='dark'
-            />
-            Light:
-            <Radio
-              checked={this.state.type === 'light'}
-              onChange={ev => this.setState({ type: ev.target.value })}
-              value='light'
-            />
-          </Grid>
-          <Grid item xs={12} align='center'>
-            <Button variant='contained' color='primary'
-              onClick={() => this.props.saveSettings(this.state.type, this.state.primary, this.state.secondary)}> Save </Button>
-          </Grid>
-        </Grid>
-      </Container>
+      <div>
+        <Header title='Settings' />
+        <Box pt={3}>
+          <Container>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6} align='center'>
+                <ColorPicker title='Primary Color' setColor={color => this.setState({ primary: color })} />
+              </Grid>
+              <Grid item xs={12} sm={6} align='center'>
+                <ColorPicker title='Secondary Color' setColor={color => this.setState({ secondary: color })} />
+              </Grid>
+              <Grid item xs={12} align='center'>
+                Dark:
+                <Radio
+                  checked={this.state.type === 'dark'}
+                  onChange={ev => this.setState({ type: ev.target.value })}
+                  value='dark'
+                />
+                Light:
+                <Radio
+                  checked={this.state.type === 'light'}
+                  onChange={ev => this.setState({ type: ev.target.value })}
+                  value='light'
+                />
+              </Grid>
+              <Grid item xs={12} align='center'>
+                <Button variant='contained' color='primary'
+                  onClick={() => this.props.saveSettings(this.state.type, this.state.primary, this.state.secondary)}> Save </Button>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      </div>
     )
   }
 }

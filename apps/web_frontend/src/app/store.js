@@ -17,10 +17,9 @@ export function getInitalStateFromToken (tok) {
     chat: {
       groups: tok.groups
     },
-    settings: JSON.parse(tok.settings)
+    settings: JSON.parse(tok.settings || '{}')
   }
 }
-
 
 export default (preloadedState) => createStore(combineReducers({
   chat,

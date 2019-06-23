@@ -28,6 +28,15 @@ class IndexPage extends React.Component {
       name: '',
       pic: ''
     }
+
+    // Initial state
+    if (isTempTokenValid()) {
+      this.setState({ state: STATE.SIGNIN })
+      if (isTokenValid()) {
+        this.props.upgrade()
+        this.goToChatPage()
+      }
+    }
   }
 
   componentDidMount () {
@@ -36,12 +45,6 @@ class IndexPage extends React.Component {
   }
 
   async pollForUpgrade () {
-    if (this.state.state === STATE.START) {
-      if (isTempTokenValid()) {
-        this.setState({ state: STATE.SIGNIN })
-      }
-    }
-
     if (this.state.state === STATE.SIGNIN) {
       await this.props.upgrade()
       if (isTokenValid()) {
