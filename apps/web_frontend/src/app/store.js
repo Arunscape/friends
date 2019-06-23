@@ -17,7 +17,7 @@ export function getInitalStateFromToken (tok) {
     chat: {
       groups: tok.groups
     },
-    settings: tok.settings
+    settings: JSON.parse(tok.settings)
   }
 }
 
