@@ -21,7 +21,7 @@ func CreateUserTokenShort(user datatypes.User) (string, error) {
 	return createUserToken(user, time.Hour/2)
 }
 func createUserToken(user datatypes.User, duration time.Duration) (string, error) {
-	logger.Debug("Created token for user: ", user.Name)
+	logger.Debug("Creating token for user: ", user.Name)
 	exp := time.Now().Add(duration)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"name":        user.Name,
@@ -30,6 +30,8 @@ func createUserToken(user datatypes.User, duration time.Duration) (string, error
 		"picture":     user.Picture,
 		"groups":      user.Groups,
 		"permissions": user.Permissions,
+		"settings":    user.Settings,
+		"isValidated": user.IsValidated,
 		"exp":         utils.GetMillis(exp),
 	})
 	tokenString, err := token.SignedString(USER_SECRET)
