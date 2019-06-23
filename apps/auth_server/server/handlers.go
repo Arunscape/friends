@@ -100,3 +100,17 @@ func SignoutHandler(db database.AccessObject) func(http.ResponseWriter, *http.Re
 func UpgradeHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
 	return web_server.JLogicHandler(logic.UpgradeLogic, &logic.Token{}, db)
 }
+
+// SettingsHandler: /set-user-preferences
+// Expects:
+// {
+//    "Settings": "{}", // JSON string
+//    "Tok": "aaa.bbb.ccc"
+// }
+// Returns:
+// {
+//    "Tok": "aaa.bbb.ccc"
+// }
+func SettingsHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
+	return web_server.JLogicHandler(logic.SettingsLogic, &logic.Settings{}, db)
+}

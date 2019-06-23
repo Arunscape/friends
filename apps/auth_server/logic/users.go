@@ -32,6 +32,20 @@ func UpgradeLogic(d interface{}, db_dat interface{}) (interface{}, error) {
 	return Token{tok}, err
 }
 
+// SettingsLogic Sets the users settings based on the token
+func SettingsLogic(d interface{}, db_dat interface{}) (interface{}, error) {
+	db := db_dat.(database.AccessObject)
+	data := d.(*Settings)
+	usr, err := getUserFromToken(db, data.Tok)
+	if err != nil {
+		return nil, errors.New(web_server.USER_NOT_FOUND)
+	}
+	usr.Settings = data.Settings
+	db.SaveUserSettings(usr)
+	tok, err := security.CreateUserTokenLong(usr)
+	return &Token{tok}, nil
+}
+
 // SigninLogic creates a short lived token, sends email link, then returns token, sets isValidated to false and isSignedIn to true
 func SigninLogic(d interface{}, db_dat interface{}) (interface{}, error) {
 	db := db_dat.(database.AccessObject)
@@ -105,6 +119,10 @@ func getUserFromToken(db database.AccessObject, tokStr string) (datatypes.User, 
 type (
 	Token struct {
 		Tok string
+	}
+	Settings struct {
+		Tok      string
+		Settings string
 	}
 	Email struct {
 		Email string

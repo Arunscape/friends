@@ -1,6 +1,10 @@
 import { saveSettings as saveSettingsAction } from './reducer'
 
-export function saveSettings (dispatch, type, primary, secondary) {
+import { JPost, JUrl } from 'services/http/api'
+import { setToken } from 'services/security/token'
+
+export async function saveSettings (dispatch, type, primary, secondary) {
   dispatch(saveSettingsAction(type, primary, secondary))
-  // TODO: make http to actually save user colors to server
+  let { Tok } = await JPost(JUrl('auth', 'set-user-preferences'), { Settings: JSON.stringify({ palette: { type, primary, secondary } }) })
+  setToken(Tok)
 }

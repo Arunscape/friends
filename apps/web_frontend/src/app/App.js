@@ -3,7 +3,7 @@ import React from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 
 import { Provider } from 'react-redux'
-import store from 'app/store'
+import store, { getInitalStateFromToken } from 'app/store'
 
 import ChatPage from 'modules/Chat'
 import SettingsPage from 'modules/Settings'
@@ -13,21 +13,6 @@ import PrivateRoute from './privateRoute'
 import DynamicThemeProvider from './DynamicThemeProvider'
 
 import { getTokenData } from 'services/security/token'
-
-function getInitalStateFromToken (tok) {
-  console.log(tok)
-  return {
-    user: {
-      name: tok.name,
-      email: tok.email,
-      pic: tok.picture,
-      permissions: tok.permissions
-    },
-    chat: {
-      groups: tok.groups
-    }
-  }
-}
 
 function App () {
   const Redirector = (props) => <Redirect to='/' />
