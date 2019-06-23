@@ -5,6 +5,7 @@ import Message from './Message'
 import MessageBar from './SendMessage'
 
 import { isTokenValid } from 'services/security/token'
+import Header from 'components/atoms/Header'
 
 export default class ChatPage extends React.Component {
   render () {
@@ -13,6 +14,7 @@ export default class ChatPage extends React.Component {
     }
     return (
       <>
+        <Header title='Chat' />
         <Message text={'Hello, World'} />
         <MessageBar />
       </>

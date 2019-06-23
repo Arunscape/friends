@@ -44,7 +44,6 @@ async function convertToJson (response) {
     return { status: response.status }
   }
   let data = await response.json()
-  console.log(data)
   return { ...data, status: response.status }
 }
 async function errorOnStatus (response) {

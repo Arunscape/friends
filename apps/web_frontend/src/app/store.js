@@ -5,8 +5,16 @@ import user from 'modules/Auth/reducer.js'
 import chat from 'modules/Chat/reducer.js'
 import settings from 'modules/Settings/reducer.js'
 
+export const REPLACE_TOKEN = 'REPLACE_TOKEN'
+
+export function replaceTokenInStore (tok) {
+  return {
+    type: REPLACE_TOKEN,
+    payload: tok
+  }
+}
+
 export function getInitalStateFromToken (tok) {
-  console.log(tok)
   return {
     user: {
       name: tok.name,

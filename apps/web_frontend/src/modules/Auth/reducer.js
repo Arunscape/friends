@@ -1,3 +1,5 @@
+import { REPLACE_TOKEN } from 'app/store'
+
 const CHECK_EMAIL = 'CHECK_EMAIL'
 const SIGNUP = 'SIGNUP'
 const SIGNIN = 'SIGNIN'
@@ -18,6 +20,13 @@ function action (type, payload) {
 
 export default function UserReducer (state = initialState, action) {
   switch (action.type) {
+    case REPLACE_TOKEN:
+      return {
+        name: action.payload.name,
+        email: action.payload.email,
+        pic: action.payload.picture,
+        permissions: action.payload.permissions
+      }
     case SIGNUP:
       return {
         ...state,

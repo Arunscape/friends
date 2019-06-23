@@ -1,3 +1,5 @@
+import { REPLACE_TOKEN } from 'app/store'
+
 import Purple from '@material-ui/core/colors/purple'
 import Orange from '@material-ui/core/colors/orange'
 
@@ -19,6 +21,10 @@ function action (type, payload) {
 
 export default function SettingsReducer (state = initialState, action) {
   switch (action.type) {
+    case REPLACE_TOKEN:
+      return {
+        ...JSON.parse(action.payload.settings || '{}')
+      }
     case SAVE_SETTINGS:
       return {
         ...state,

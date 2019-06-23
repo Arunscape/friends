@@ -1,6 +1,7 @@
 import { JUrl, JPost } from 'services/http/api'
 import { checkEmail, signin as signinAction, signup as signupAction } from './reducer'
-import { setToken, clearToken } from 'services/security/token'
+import { setToken, clearToken, getTokenData } from 'services/security/token'
+import { replaceTokenInStore } from 'app/store'
 
 export async function checkUser (dispatch, Email) {
   dispatch(checkEmail(Email))
@@ -27,6 +28,8 @@ export async function upgrade (dispatch) {
   try {
     let res = await JPost(JUrl('auth', 'upgrade'))
     setToken(res.Tok)
+    console.log(replaceTokenInStore(getTokenData()))
+    dispatch(replaceTokenInStore(getTokenData()))
     return true
   } catch (err) { } // error means we can't upgrade yet
   return false
