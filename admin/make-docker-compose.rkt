@@ -1,8 +1,9 @@
 #lang racket
 
+
 (define url "friends.reckhard.ca")
 (define envs '(("prod" 3000) ("dev" 5000) ("spike" 8000)))
-(define servers '(("auth" 0) ("msg" 1) ("email" 2)))
+(define servers '(("auth" 0) ("msg" 1) ("email" 2) ("image" 3)))
 
 (define docker-traefik-info
   "version: \"3\"
@@ -17,6 +18,15 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
 ")
+
+(define docker-network-info "
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.49.0.0/16
+  ")
 
 
 
@@ -58,3 +68,4 @@ services:
 ;; Displaying the results
 (display docker-traefik-info)
 (display (string-join (make-docker) "\n"))
+(display docker-network-info)

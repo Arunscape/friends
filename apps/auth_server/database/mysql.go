@@ -43,6 +43,7 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
     name VARCHAR(256),
     email VARCHAR(256),
     picture VARCHAR(512),
+    settings TEXT,
     PRIMARY KEY(id))`)
 
 	dao.db.Exec(`CREATE TABLE validations(
@@ -52,13 +53,14 @@ func (dao *MySQLAccessObject) ResetTheWholeDatabase() {
     secret CHAR(37),
     PRIMARY KEY(uid))`)
 
-	dao.CreateNewUser(&datatypes.User{Name: "Testy McTestface", Email: "testy@test.test", Picture: "https://i.guim.co.uk/img/media/ddda0e5745cba9e3248f0e27b3946f14c4d5bc04/108_0_7200_4320/master/7200.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=dff8678a6e1cdd5716fe6c49767bac9a"})
+	dao.CreateNewUser(&datatypes.User{Name: "Testy McTestface", Email: "testy@test.test", Picture: "https://i.guim.co.uk/img/media/ddda0e5745cba9e3248f0e27b3946f14c4d5bc04/108_0_7200_4320/master/7200.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=dff8678a6e1cdd5716fe6c49767bac9a", Settings: "{}"})
 	logger.Info("Database reset and ready to go")
 }
 
 func (dao *MySQLAccessObject) Open() {
 	dataString := os.Getenv("DB_USER") + ":" + os.Getenv("DB_PASSWD") + "@tcp(" + os.Getenv("DB_LOC") + ")/" + os.Getenv("DB_NAME")
 	db, err := sql.Open("mysql", dataString)
+	logger.Info("Connecting to database: ", dataString)
 	if err != nil {
 		logger.Error("Failed to connect to database: ", dataString, err)
 	}
@@ -72,7 +74,8 @@ func (dao *MySQLAccessObject) Close() {
 func (dao *MySQLAccessObject) CreateNewUser(user *datatypes.User) {
 	_, isUser := dao.GetUserByEmail(user.Email)
 	if !isUser {
-		dao.db.Exec("INSERT INTO users(id, name, email, picture) VALUES(?, ?, ?, ?)", utils.UUID(), user.Name, user.Email, user.Picture)
+		dao.db.Exec("INSERT INTO users(id, name, email, picture, settings) VALUES(?, ?, ?, ?, ?)",
+			utils.UUID(), user.Name, user.Email, user.Picture, "{}")
 		logger.Debug("Successfully inserted new user: ", user)
 	} else {
 		logger.Debug("Failed to insert new user: ", user)
@@ -82,7 +85,8 @@ func (dao *MySQLAccessObject) CreateNewUser(user *datatypes.User) {
 func (dao *MySQLAccessObject) GetUserByEmail(id string) (datatypes.User, bool) {
 	var user datatypes.User
 	found := true
-	err := dao.db.QueryRow("select id, name, email, picture from users where email = ?", id).Scan(&user.Id, &user.Name, &user.Email, &user.Picture)
+	err := dao.db.QueryRow("select id, name, email, picture, settings from users where email = ?", id).Scan(
+		&user.Id, &user.Name, &user.Email, &user.Picture, &user.Settings)
 	if err != nil {
 		logger.Debug("Failed to query database GetUserByEmail with email (", id, "): ", err)
 		found = false
@@ -170,7 +174,7 @@ func (dao *MySQLAccessObject) setValidationsByUser(usr *datatypes.User) {
 }
 func (dao *MySQLAccessObject) AddUserValidation(usr *datatypes.User, secret string) {
 	usr.IsSignedIn = false
-	usr.IsValidated = false
+	usr.IsValidated = true
 	usr.Secret = secret
 	dao.setValidationsByUser(usr)
 }
@@ -200,4 +204,8 @@ func (dao *MySQLAccessObject) UpgradeToken(tok string) bool {
 	}
 	dao.SignInUser(&usr)
 	return true
+}
+func (dao *MySQLAccessObject) SaveUserSettings(usr datatypes.User) bool {
+	_, err := dao.db.Exec("UPDATE users SET settings = ? WHERE id = ?", usr.Settings, usr.Id)
+	return err == nil
 }

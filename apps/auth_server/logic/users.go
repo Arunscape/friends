@@ -4,6 +4,7 @@ import (
 	"github.com/arunscape/friends/apps/auth_server/database"
 	"github.com/arunscape/friends/commons/server/datatypes"
 	"github.com/arunscape/friends/commons/server/logger"
+	"github.com/arunscape/friends/commons/server/mail"
 	"github.com/arunscape/friends/commons/server/security"
 	"github.com/arunscape/friends/commons/server/utils"
 	"github.com/arunscape/friends/commons/server/web_server"
@@ -21,9 +22,28 @@ func UpgradeLogic(d interface{}, db_dat interface{}) (interface{}, error) {
 	if err != nil {
 		return usr, err
 	}
+	if !usr.IsSignedIn {
+		return nil, errors.New(web_server.TOKEN_FORBIDDEN)
+	}
+	db.SignInUser(&usr)
 	tok, err := security.CreateUserTokenLong(usr)
 
+	logger.Info("Validating: ", usr.Email)
 	return Token{tok}, err
+}
+
+// SettingsLogic Sets the users settings based on the token
+func SettingsLogic(d interface{}, db_dat interface{}) (interface{}, error) {
+	db := db_dat.(database.AccessObject)
+	data := d.(*Settings)
+	usr, err := getUserFromToken(db, data.Tok)
+	if err != nil {
+		return nil, errors.New(web_server.USER_NOT_FOUND)
+	}
+	usr.Settings = data.Settings
+	db.SaveUserSettings(usr)
+	tok, err := security.CreateUserTokenLong(usr)
+	return &Token{tok}, nil
 }
 
 // SigninLogic creates a short lived token, sends email link, then returns token, sets isValidated to false and isSignedIn to true
@@ -74,8 +94,9 @@ func startSigninProcess(email string, db database.AccessObject) (interface{}, er
 		return nil, errors.New(web_server.USER_DOES_NOT_EXIST)
 	}
 	db.AddUserValidation(&usr, secret)
-	link := "https://auth." + os.Getenv("DOMAIN") + "/validate/" + secret // TODO: email link
-	logger.Info("Created secure linK: ", link)
+	link := "http://auth." + os.Getenv("DOMAIN") + "/validate/" + secret // TODO: email link
+	mail.SendEmail([]string{usr.Email}, "Your signup link for friends", link)
+	logger.Info("Created secure link: ", link)
 	tok, err := security.CreateUserTokenShort(usr)
 	if err != nil {
 		return nil, errors.New(web_server.UNKNOWN)
@@ -98,6 +119,10 @@ func getUserFromToken(db database.AccessObject, tokStr string) (datatypes.User, 
 type (
 	Token struct {
 		Tok string
+	}
+	Settings struct {
+		Tok      string
+		Settings string
 	}
 	Email struct {
 		Email string

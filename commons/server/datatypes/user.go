@@ -12,4 +12,5 @@ type User struct {
 	IsSignedIn  bool
 	IsValidated bool
 	Secret      string
+	Settings    string
 }

@@ -10,6 +10,8 @@ local.properties
 # Project files
 **/.secret.sh
 admin/docker-compose.yml
+node_modules/
+package-lock.json
 
 # generated code
 **/*.g.dart

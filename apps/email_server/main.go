@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/arunscape/friends/commons/server/logger"
+	"github.com/arunscape/friends/commons/server/mail"
 
 	"encoding/json"
 	"net/http"
@@ -18,12 +19,6 @@ var (
 	USER   = os.Getenv("EMAIL_USER")
 	PASSWD = os.Getenv("EMAIL_PASSWORD")
 )
-
-type EmailMsg struct {
-	To      []string
-	Subject string
-	Body    string
-}
 
 func main() {
 	if os.Getenv("DID_I_SET_THE_ENVIROMENT_VARIABLES") != "YES I DID" {
@@ -44,7 +39,7 @@ func main() {
 
 func emailHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	var data EmailMsg
+	var data mail.EmailMsg
 	err := decoder.Decode(&data)
 	if err != nil {
 		logger.Error(err)

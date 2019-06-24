@@ -20,6 +20,9 @@ import (
 // <p>Thanks!</p>
 func ValidateHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
 	return func(res http.ResponseWriter, req *http.Request) {
+		if web_server.Cors(res, req) {
+			return
+		}
 		logger.Info(req.Method, " ", req.URL)
 
 		secret := strings.Split(req.URL.String(), "/")[2]
@@ -96,4 +99,18 @@ func SignoutHandler(db database.AccessObject) func(http.ResponseWriter, *http.Re
 // }
 func UpgradeHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
 	return web_server.JLogicHandler(logic.UpgradeLogic, &logic.Token{}, db)
+}
+
+// SettingsHandler: /set-user-preferences
+// Expects:
+// {
+//    "Settings": "{}", // JSON string
+//    "Tok": "aaa.bbb.ccc"
+// }
+// Returns:
+// {
+//    "Tok": "aaa.bbb.ccc"
+// }
+func SettingsHandler(db database.AccessObject) func(http.ResponseWriter, *http.Request) {
+	return web_server.JLogicHandler(logic.SettingsLogic, &logic.Settings{}, db)
 }

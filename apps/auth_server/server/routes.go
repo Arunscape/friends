@@ -21,6 +21,8 @@ func MakeRoutes(db database.AccessObject) {
 	http.HandleFunc("/signout", SignoutHandler(db))
 	http.HandleFunc("/upgrade", UpgradeHandler(db))
 	http.HandleFunc("/validate/", ValidateHandler(db))
+
+	http.HandleFunc("/set-user-preferences", SettingsHandler(db))
 }
 
 // RunServer just runs the server on a given port

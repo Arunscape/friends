@@ -17,4 +17,5 @@ type AccessObject interface {
 	SignInUser(*datatypes.User)
 	SignOutUser(*datatypes.User)
 	UpgradeToken(string) bool
+	SaveUserSettings(datatypes.User) bool
 }
