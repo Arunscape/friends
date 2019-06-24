@@ -7,6 +7,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
@@ -23,6 +24,10 @@ func CreateUserTokenShort(user datatypes.User) (string, error) {
 func createUserToken(user datatypes.User, duration time.Duration) (string, error) {
 	logger.Debug("Creating token for user: ", user.Name)
 	exp := time.Now().Add(duration)
+	settings := user.Settings
+	if !isJSON(settings) {
+		settings = "{}"
+	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"name":        user.Name,
 		"id":          user.Id,
@@ -30,12 +35,17 @@ func createUserToken(user datatypes.User, duration time.Duration) (string, error
 		"picture":     user.Picture,
 		"groups":      user.Groups,
 		"permissions": user.Permissions,
-		"settings":    user.Settings,
+		"settings":    settings,
 		"isValidated": user.IsValidated,
 		"exp":         utils.GetMillis(exp),
 	})
 	tokenString, err := token.SignedString(USER_SECRET)
 	return tokenString, err
+}
+
+func isJSON(s string) bool {
+	var js map[string]interface{}
+	return json.Unmarshal([]byte(s), &js) == nil
 }
 
 func parseUserToken(tokStr string) (*jwt.Token, error) {

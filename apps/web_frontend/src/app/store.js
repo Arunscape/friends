@@ -8,6 +8,7 @@ import settings from 'modules/Settings/reducer.js'
 export const REPLACE_TOKEN = 'REPLACE_TOKEN'
 
 export function replaceTokenInStore (tok) {
+  tok.settings = JSON.parse(tok.settings || '{}')
   return {
     type: REPLACE_TOKEN,
     payload: tok
@@ -29,8 +30,8 @@ export function getInitalStateFromToken (tok) {
   }
 }
 
-export default (preloadedState) => createStore(combineReducers({
+export default createStore(combineReducers({
   chat,
   user,
   settings
-}), preloadedState, composeWithDevTools())
+}), composeWithDevTools())

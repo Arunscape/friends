@@ -24,6 +24,8 @@ export default class ChatPage extends React.Component {
         <Container maxWidth='md' height='100%'>
           <Message text={'Hello, World'} />
           <Button variant='contained' color='primary' onClick={() => signout()}> Logout </Button>
+          <Button variant='contained' color='secondary' onClick={() => this.props.history.push('/settings')}> Settings </Button>
+
           <MessageBar />
         </Container>
       </Box>

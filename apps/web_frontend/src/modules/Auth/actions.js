@@ -28,7 +28,6 @@ export async function upgrade (dispatch) {
   try {
     let res = await JPost(JUrl('auth', 'upgrade'))
     setToken(res.Tok)
-    console.log(replaceTokenInStore(getTokenData()))
     dispatch(replaceTokenInStore(getTokenData()))
     return true
   } catch (err) { } // error means we can't upgrade yet
