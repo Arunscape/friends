@@ -35,7 +35,7 @@ export async function upgrade (dispatch) {
   return false
 }
 
-export async function signout (dispatch) {
+export async function signout () {
   await JPost(JUrl('auth', 'signout'))
   clearToken()
 }
