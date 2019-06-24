@@ -31,7 +31,7 @@ class IndexPage extends React.Component {
 
     // Initial state
     if (isTempTokenValid()) {
-      this.setState({ state: STATE.SIGNIN })
+      this.state.state = STATE.SIGNIN
       if (isTokenValid()) {
         this.props.upgrade()
         this.goToChatPage()
