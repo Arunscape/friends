@@ -13,7 +13,7 @@ import IndexPage from 'modules/Auth'
 import PrivateRoute from './privateRoute'
 import DynamicThemeProvider from './DynamicThemeProvider'
 
-function App () {
+export default  () => {
   const Redirector = (props) => <Redirect to='/' />
   store.dispatch(replaceTokenInStore(getTokenData()))
   return (
@@ -31,5 +31,3 @@ function App () {
     </Provider>
   )
 }
-
-export default App

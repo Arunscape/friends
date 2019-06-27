@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { connect } from 'react-redux'
 
 import Header from 'components/atoms/Header'
@@ -15,17 +15,13 @@ import Typography from '@material-ui/core/Typography'
 import * as Colors from '@material-ui/core/colors'
 const colorKeys = Object.keys(Colors)
 
-class SettingsPage extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      type: this.props.palette.type,
-      primary: this.props.palette.primary,
-      secondary: this.props.palette.secondary
-    }
-  }
+const SettingsPage = props => {
 
-  render () {
+
+  const [type, setType] = useState(props.palette.type);
+  const [primary, setPrimary] = useState(props.palette.primary)
+  const [secondary, setSecondary] = useState(props.palette.secondary)
+
     return (
       <div>
         <Header title='Settings' />
@@ -33,28 +29,28 @@ class SettingsPage extends React.Component {
           <Container>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6} align='center'>
-                <ColorPicker title='Primary Color' setColor={color => this.setState({ primary: color })} />
+                <ColorPicker title='Primary Color' setColor={color => setPrimary(color)} />
               </Grid>
               <Grid item xs={12} sm={6} align='center'>
-                <ColorPicker title='Secondary Color' setColor={color => this.setState({ secondary: color })} />
+                <ColorPicker title='Secondary Color' setColor={color => setSecondary(color)} />
               </Grid>
               <Grid item xs={12} align='center'>
                 Dark:
                 <Radio
-                  checked={this.state.type === 'dark'}
-                  onChange={ev => this.setState({ type: ev.target.value })}
+                  checked={type === 'dark'}
+                  onChange={ev => setType(ev.target.value)}
                   value='dark'
                 />
                 Light:
                 <Radio
-                  checked={this.state.type === 'light'}
-                  onChange={ev => this.setState({ type: ev.target.value })}
+                  checked={type === 'light'}
+                  onChange={ev => setType(ev.target.value)}
                   value='light'
                 />
               </Grid>
               <Grid item xs={12} align='center'>
                 <Button variant='contained' color='primary'
-                  onClick={() => this.props.saveSettings(this.state.type, this.state.primary, this.state.secondary)}> Save </Button>
+                  onClick={() => props.saveSettings(type, primary, secondary)}> Save </Button>
               </Grid>
             </Grid>
           </Container>
@@ -62,10 +58,10 @@ class SettingsPage extends React.Component {
       </div>
     )
   }
-}
 
-class ColorPicker extends React.Component {
-  render () {
+
+const ColorPicker = () => {
+ 
     const boxSize = 45
     const columns = 4
     const numToPx = num => `${num}px`
@@ -85,7 +81,7 @@ class ColorPicker extends React.Component {
       </Paper>
     )
   }
-}
+
 
 export default connect((state) => ({
   palette: state.settings.palette
