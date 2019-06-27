@@ -11,7 +11,7 @@ part 'loginPage.g.dart';
 
 @widget
 Widget loginPage(){
-  final appTitle = 'Login';
+  const appTitle = 'Login';
 
     return new MaterialApp(
       title: appTitle,
@@ -30,7 +30,9 @@ Widget loginForm(){
 
   final context = useContext();
 
-  final User user = getUser();
+  // final User user = getUser();
+
+  final email = useState('');
 
   return new Form(
     key: _formKey,
@@ -41,6 +43,7 @@ Widget loginForm(){
             if (!EmailValidator.validate(value)){
               return 'Please enter a valid email address';
             }
+            email.value = value;
           },
         ),
         Padding(
@@ -52,7 +55,7 @@ Widget loginForm(){
                 if (_formKey.currentState.validate()) {
                   // If the form is valid, we want to show a Snackbar
                   Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Logging in...')));
+                      .showSnackBar(SnackBar(content: Text('Logging in ${email.value}'...)));
                 }
               },
               child: Text('Submit'),
