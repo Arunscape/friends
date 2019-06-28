@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:provider/provider.dart';
 
-import 'login.dart';
-import '../../state/loginState.dart';
+import 'package:mobile_frontend/state/currentUser.dart';
 
 part 'loginPage.g.dart';
 
@@ -24,16 +24,17 @@ Widget loginPage(){
     );
 }
 
-@hwidget
-Widget loginForm(){
-  final _formKey = GlobalKey<FormState>();
+// @hwidget
+// Widget loginForm(){
+  class LoginForm extends StatelessWidget{
 
-  final context = useContext();
+  static final _formKey = GlobalKey<FormState>();
 
-  // final User user = getUser();
+  // final contxt = useContext();
 
-  final email = useState('');
+  Widget build(context){
 
+  final user = Provider.of<CurrentUser>(context);
   return new Form(
     key: _formKey,
     child: Column(
@@ -43,7 +44,7 @@ Widget loginForm(){
             if (!EmailValidator.validate(value)){
               return 'Please enter a valid email address';
             }
-            email.value = value;
+            user.email = value;
           },
         ),
         Padding(
@@ -55,7 +56,7 @@ Widget loginForm(){
                 if (_formKey.currentState.validate()) {
                   // If the form is valid, we want to show a Snackbar
                   Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Logging in ${email.value}'...)));
+                      .showSnackBar(SnackBar(content: Text('Logging in ${user.email}...' )));
                 }
               },
               child: Text('Submit'),
@@ -65,4 +66,5 @@ Widget loginForm(){
     )
 
   );
+  }
 }

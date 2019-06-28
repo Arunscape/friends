@@ -8,7 +8,7 @@ class User{
 }
 
 
-class LoginState with ChangeNotifier{
+class CurrentUser with ChangeNotifier{
 
   bool _authenticated;
   String _email;
@@ -59,5 +59,5 @@ class LoginState with ChangeNotifier{
     this._fullName = "${this.firstName} ${this.lastName}";
   }
 
-  LoginState({authenticated=false, email, token, firstName, lastName, phoneNumber=null, avatarURL });
+  CurrentUser({authenticated=false, email, token, firstName, lastName, phoneNumber=null, avatarURL });
 }
